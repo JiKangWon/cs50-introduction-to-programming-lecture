@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài giảng: Kiểu Dữ Liệu & Nhập Xuất C++</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tải MathJax để hiển thị công thức LaTeX -->
+    <!-- 1. Cấu hình MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- 2. Tải script MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS cho Prism.js (Syntax Highlighting - Theme Okaidia) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" xintegrity="sha512-mIs9kKbaw6JrqdefaultImIKwD6rdMMjgNsJqdPLUEVBOxtSRhQjhpLSRYMbBOEaMbM8dcGchjlowkVYdPaODeWYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* Màu nền xám xanh nhẹ */
+        }
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a5b4fc; /* Màu tím nhạt của indigo-300 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #818cf8; /* Màu tím của indigo-400 */
+        }
+        
+        /* Style cho mục lục */
+        .toc-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+        .toc-link:hover {
+            background-color: #ecfdf5; /* Nền xanh lá cây rất nhạt (emerald-50) */
+            color: #047857; /* Chữ xanh lá cây (emerald-700) */
+            border-left-color: #059669; /* Viền xanh lá cây (emerald-600) */
+            transform: translateX(4px);
+        }
+
+        /* Tùy chỉnh style cho bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #fdfdfe;
+        }
+        /* Bảng không có viền cho toán tử logic */
+        .table-borderless td {
+            border: none;
+            padding: 0.25rem 0.5rem;
+        }
+
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header của bài giảng -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 py-10">
+            <h1 class="text-4xl font-bold mb-2">BÀI GIẢNG MÔN NHẬP MÔN LẬP TRÌNH</h1>
+            <h2 class="text-2xl font-semibold opacity-90">CHỦ ĐỀ: CÁC KIỂU DỮ LIỆU CƠ SỞ VÀ NHẬP XUẤT TRONG C++</h2>
+            <div class="mt-6 border-t border-emerald-400 opacity-80 pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
+                <p class="font-medium">Giảng viên: Nguyễn Chí Cường</p>
+                <p class="font-medium mt-1 sm:mt-0">Ngôn ngữ: C & C++</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Thân trang: Mục lục (trái) và Nội dung (phải) -->
+    <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-12">
+
+        <!-- Cột Mục lục (Sidebar) -->
+        <aside class="md:col-span-1 md:sticky md:top-8 self-start">
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold text-emerald-700 mb-5 border-b-2 border-emerald-200 pb-3">Mục Lục</h3>
+                <nav>
+                    <ul class="space-y-2">
+                        <li><a href="#section1" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">1. Vấn đề & Dẫn nhập</a></li>
+                        <li><a href="#section2" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">2. Kiểu dữ liệu cơ sở</a></li>
+                        <li><a href="#section3" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">3. Biến, Hằng & Biểu thức</a></li>
+                        <li><a href="#section4" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">4. Lệnh Nhập/Xuất</a></li>
+                        <li><a href="#section5" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">5. Bài tập & Ứng dụng</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Cột Nội dung chính -->
+        <main class="md:col-span-3">
+
+            <!-- PHẦN 1: VẤN ĐỀ VÀ DẪN NHẬP -->
+            <section id="section1" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">1. VẤN ĐỀ VÀ DẪN NHẬP</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">Vấn đề:</h3>
+                <p class="mb-4 leading-relaxed">Viết chương trình thực hiện yêu cầu sau:</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Nhập thông tin của một nhân viên gồm: mã nhân viên, số giờ làm việc.</li>
+                    <li>Tính lương cho nhân viên, biết mỗi giờ làm việc được công ty trả 6.75$.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Kết quả chương trình minh họa:</h3>
+                <div class="bg-gray-800 text-gray-100 font-mono p-6 rounded-lg shadow-inner">
+                    <p>Nhập mã nhân viên: 1122.</p>
+                    <p>Nhập số giờ làm việc: 38.5.</p>
+                    <p class="mt-2">Tiền lương công ty phải trả cho nhân viên 1122 là 259.875$.</p>
+                </div>
+                <p class="mt-4 text-gray-600 italic leading-relaxed">(Để giải quyết vấn đề trên, chúng ta cần tìm hiểu về các kiểu dữ liệu để lưu trữ mã nhân viên, số giờ làm việc và tiền lương, cũng như các lệnh nhập xuất.)</p>
+            </section>
+
+            <!-- PHẦN 2: NỘI DUNG CHI TIẾT - Mục 1 -->
+            <section id="section2" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">2. CÁC KIỂU DỮ LIỆU CƠ SỞ</h2>
+                <p class="mb-4 leading-relaxed">Ngôn ngữ lập trình C có 4 kiểu cơ sở như sau:</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Kiểu số nguyên:</strong> Giá trị của nó là các số nguyên như 2912, -1706, v.v..</li>
+                    <li><strong>Kiểu số thực:</strong> Giá trị của nó là các số thực như 3.1415, 29.12, -17.06, v.v..</li>
+                    <li><strong>Kiểu luận lý (Boolean):</strong> Giá trị đúng hoặc sai.</li>
+                    <li><strong>Kiểu ký tự:</strong> 256 ký tự trong bảng mã ASCII.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">1.1. Kiểu số nguyên (Integer Types)</h3>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">A. Kiểu số nguyên (có dấu)</h4>
+                <p class="mb-4 leading-relaxed">Miền giá trị: Với $n$ bit có dấu, miền giá trị là: $\mathbf{–2^{n – 1} \dots +2^{n – 1} – 1}$.</p>
+                <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                    <table>
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th>Kiểu (Type)</th>
+                                <th>Độ lớn (Byte)</th>
+                                <th>Miền giá trị (Range)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-mono">char</td>
+                                <td>1</td>
+                                <td>–128 $\to$ +127</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">int</td>
+                                <td>2</td>
+                                <td>–32.768 $\to$ +32.767</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">short</td>
+                                <td>2</td>
+                                <td>–32.768 $\to$ +32.767</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">long</td>
+                                <td>4</td>
+                                <td>–2.147.483.648 $\to$ +2.147.483.647</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">B. Kiểu số nguyên (không dấu)</h4>
+                <p class="mb-4 leading-relaxed">Miền giá trị: Với $n$ bit không dấu, miền giá trị là: $\mathbf{0 \dots 2^n – 1}$.</p>
+                <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                    <table>
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th>Kiểu (Type)</th>
+                                <th>Độ lớn (Byte)</th>
+                                <th>Miền giá trị (Range)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-mono">unsigned char</td>
+                                <td>1</td>
+                                <td>0 $\to$ 255</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">unsigned int</td>
+                                <td>2</td>
+                                <td>0 $\to$ 65.535</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">unsigned short</td>
+                                <td>2</td>
+                                <td>0 $\to$ 65.535</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">unsigned long</td>
+                                <td>4</td>
+                                <td>0 $\to$ 4.294.967.295</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">1.2. Kiểu số thực (Floating-point Types)</h3>
+                <p class="mb-4 leading-relaxed">Số thực được biểu diễn dưới dạng khoa học. Ví dụ: $17.06 = 1.706 \times 10 = \mathbf{1.706 \times 10^1}$.</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Độ chính xác đơn (Single-precision):</strong> Chính xác đến 7 số lẻ (*).</li>
+                    <li><strong>Độ chính xác kép (Double-precision):</strong> Chính xác đến 19 số lẻ (**).</li>
+                </ul>
+                <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                    <table>
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th>Kiểu (Type)</th>
+                                <th>Độ lớn (Byte)</th>
+                                <th>Miền giá trị (Range)</th>
+                                <th>Độ chính xác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-mono">float (*)</td>
+                                <td>4</td>
+                                <td>$3.4 \times 10^{-38} \to 3.4 \times 10^{38}$</td>
+                                <td>7 số lẻ</td>
+                            </tr>
+                            <tr>
+                                <td class="font-mono">double (**)</td>
+                                <td>8</td>
+                                <td>$1.7 \times 10^{-308} \to 1.7 \times 10^{308}$</td>
+                                <td>19 số lẻ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">1.3. Kiểu luận lý (Boolean Type)</h3>
+                 <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>C ngầm định một cách không tường minh: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">false</code> (sai) là giá trị $\mathbf{0}$.</li>
+                    <li><code class="bg-gray-200 text-red-600 px-2 py-1 rounded">true</code> (đúng) là giá trị khác 0, thường là 1.</li>
+                    <li>C++ sử dụng từ khóa <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">bool</code>.</li>
+                    <li><strong>Ví dụ:</strong> 0 (false), 1 (true), 2 (true), 2.5 (true).</li>
+                    <li>$1 > 2$ (kết quả 0, false), $1 < 2$ (kết quả 1, true).</li>
+                 </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">1.4. Kiểu ký tự (Character Type)</h3>
+                 <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Tên kiểu: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">char</code>.</li>
+                    <li>Miền giá trị: 256 ký tự trong bảng mã ASCII.</li>
+                    <li><strong>Lưu ý quan trọng:</strong> Kiểu ký tự chính là kiểu số nguyên do:
+                        <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                            <li>Lưu tất cả dữ liệu ở dạng số.</li>
+                            <li>Không lưu trực tiếp ký tự mà chỉ lưu mã ASCII của ký tự đó.</li>
+                        </ul>
+                    </li>
+                    <li class="mt-2"><strong>Ví dụ:</strong>
+                        <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                            <li>Lưu số 65 tương đương với ký tự ‘A’.</li>
+                            <li>Lưu số 97 tương đương với ký tự ‘a’.</li>
+                        </ul>
+                    </li>
+                 </ul>
+            </section>
+
+            <!-- PHẦN 2: NỘI DUNG CHI TIẾT - Mục 2 -->
+            <section id="section3" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">3. BIẾN, HẰNG, CÂU LỆNH VÀ BIỂU THỨC</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">2.1. Biến (Variable)</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Khái niệm:</strong> Biến cho phép cung cấp một tên có ý nghĩa cho mỗi vị trí nhớ trong bộ nhớ.</li>
+                    <li>Mỗi biến gắn liền với một kiểu dữ liệu.</li>
+                    <li><strong>Cú pháp khai báo biến trong C/C++:</strong></li>
+                </ul>
+                <pre><code class="language-cpp">
+&lt;kiểu dữ liệu&gt; &lt;tên biến&gt;;
+&lt;kiểu dữ liệu&gt; &lt;tên biến 1&gt;, &lt;tên biến 2&gt;;
+                </code></pre>
+                <p class="mt-4 mb-4"><strong>Ví dụ:</strong></p>
+                <pre><code class="language-cpp">
+int i;
+int j, k;
+unsigned char dem;
+float ketqua, delta;
+                </code></pre>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.2. Hằng số (Constant)</h3>
+                <p class="mb-4 leading-relaxed">Có hai cú pháp chính để khai báo hằng:</p>
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">A. Sử dụng chỉ thị tiền xử lý <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">#define</code></h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Cú pháp: <code class="bg-gray-200 px-2 py-1 rounded">#define &lt;tênhằng&gt; &lt;giá trị&gt;</code>.</li>
+                    <li>Lưu ý: Không có dấu chấm phẩy (;).</li>
+                    <li>Ví dụ: <code class="bg-gray-200 px-2 py-1 rounded">#define MAX 100</code>, <code class="bg-gray-200 px-2 py-1 rounded">#define PI 3.14</code>.</li>
+                </ul>
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">B. Sử dụng từ khóa <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">const</code></h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Cú pháp: <code class="bg-gray-200 px-2 py-1 rounded">const &lt;kiểu dữ liệu&gt; &lt;tên hằng&gt; = &lt;giá trị&gt;;</code>.</li>
+                    <li>Ví dụ: <code class="bg-gray-200 px-2 py-1 rounded">const int MAX = 100;</code>, <code class="bg-gray-200 px-2 py-1 rounded">const float PI = 3.14;</code>.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.3. Biểu thức (Expressions)</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Khái niệm:</strong> Là sự kết hợp các toán tử (Operator) và các toán hạng (Operand).</li>
+                    <li><strong>Toán tử:</strong> +, –, *, /, % ,… (tác động lên giá trị của toán hạng và cho giá trị có kiểu nhất định).</li>
+                    <li><strong>Toán hạng:</strong> Hằng, biến, lời gọi hàm ,....</li>
+                    <li><strong>Ví dụ:</strong> $2 * y + 5$, $2 + 3$, $a / 5$, $(a + b) * 5$.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.4. Toán tử gán (=)</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Khái niệm:</strong> Toán tử gán thường được sử dụng trong lập trình để gán giá trị cho biến.</li>
+                    <li><strong>Cú pháp:</strong></li>
+                </ul>
+                <pre><code class="language-cpp">
+&lt;biến&gt; = &lt;giá trị&gt;;
+&lt;biến&gt; = &lt;biến&gt;;
+&lt;biến&gt; = &lt;biểu thức&gt;;
+                </code></pre>
+                <p class="mt-4 mb-4"><strong>Đặc điểm:</strong> Có thể thực hiện liên tiếp phép gán. <br>Ví dụ: <code class="bg-gray-200 px-2 py-1 rounded">a = b = c = d = e = 156;</code> (Thực hiện gán từ phải sang trái).</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.5. Các loại Toán tử</h3>
+                <p class="mb-4 leading-relaxed">Các loại toán tử chính bao gồm:</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Số học (Arithmetic)</li>
+                    <li>Quan hệ (Relational)</li>
+                    <li>Luận Lý (Logical)</li>
+                    <li>Nhị phân (Bitwise)</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">A. Các toán tử toán học</h4>
+                <p class="mb-2"><strong>Toán tử 1 ngôi (Unary):</strong> Chỉ có một toán hạng: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">++</code> (tăng 1), <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">--</code> (giảm 1).</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Đặt trước toán hạng (<code class="bg-gray-200 px-2 py-1 rounded">++x</code> hay <code class="bg-gray-200 px-2 py-1 rounded">--x</code>): Thực hiện tăng/giảm trước.</li>
+                    <li>Đặt sau toán hạng (<code class="bg-gray-200 px-2 py-1 rounded">x++</code> hay <code class="bg-gray-200 px-2 py-1 rounded">x--</code>): Thực hiện tăng/giảm sau.</li>
+                    <li><strong>Ví dụ:</strong>
+                        <pre><code class="language-cpp">
+x = 10; y = x++; // y nhận giá trị 10, sau đó x tăng lên 11
+x = 10; y = ++x; // x tăng lên 11, sau đó y nhận giá trị 11
+                        </code></pre>
+                    </li>
+                </ul>
+                <p class="mb-2"><strong>Toán tử 2 ngôi (Binary):</strong> Có hai toán hạng: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">+</code>, <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">–</code>, <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">*</code>, <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">/</code>, <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">%</code> (chia lấy phần dư).</p>
+                <p class="mb-2"><strong>Toán tử gộp:</strong> $x = x + y \Leftrightarrow \mathbf{x += y}$.</p>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">B. Các toán tử trên bit (Áp dụng cho số nguyên)</h4>
+                <p class="mb-4 leading-relaxed">Tác động lên các bit của toán hạng.</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Logic bitwise:</strong> $\mathbf{&}$ (and), $\mathbf{|}$ (or), $\mathbf{\wedge}$ (xor), $\mathbf{\sim}$ (not/bù 1).</li>
+                    <li><strong>Dịch bit:</strong> $\mathbf{>>}$ (shift right), $\mathbf{<<}$ (shift left).</li>
+                    <li><strong>Toán tử gộp:</strong> <code class="bg-gray-200 px-2 py-1 rounded">&=</code>, <code class="bg-gray-200 px-2 py-1 rounded">|=</code>, <code class="bg-gray-200 px-2 py-1 rounded">^=</code>, <code class="bg-gray-200 px-2 py-1 rounded">~=</code>, <code class="bg-gray-200 px-2 py-1 rounded">>>=</code>, <code class="bg-gray-200 px-2 py-1 rounded"><<=</code>.</li>
+                </ul>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                    <table class="table-borderless">
+                        <tr> <td><b>&</b></td> <td><b>0</b></td> <td><b>1</b></td> </tr>
+                        <tr> <td><b>0</b></td> <td>0</td> <td>0</td> </tr>
+                        <tr> <td><b>1</b></td> <td>0</td> <td>1</td> </tr>
+                    </table>
+                    <table class="table-borderless">
+                        <tr> <td><b>|</b></td> <td><b>0</b></td> <td><b>1</b></td> </tr>
+                        <tr> <td><b>0</b></td> <td>0</td> <td>1</td> </tr>
+                        <tr> <td><b>1</b></td> <td>1</td> <td>1</td> </tr>
+                    </table>
+                    <table class="table-borderless">
+                        <tr> <td><b>^</b></td> <td><b>0</b></td> <td><b>1</b></td> </tr>
+                        <tr> <td><b>0</b></td> <td>0</td> <td>1</td> </tr>
+                        <tr> <td><b>1</b></td> <td>1</td> <td>0</td> </tr>
+                    </table>
+                     <table class="table-borderless">
+                        <tr> <td><b>~</b></td> <td><b>0 $\to$ 1</b></td> </tr>
+                        <tr> <td><b>~</b></td> <td><b>1 $\to$ 0</b></td> </tr>
+                    </table>
+                </div>
+
+                <p class="mt-4 mb-4"><strong>Ví dụ minh họa thuật toán trên bit:</strong></p>
+                <pre><code class="language-cpp">
+int a = 5; // 0000 0000 0000 0101
+int b = 6; // 0000 0000 0000 0110
+int z1, z2, z3, z4, z5, z6;
+
+z1 = a & b;  // 0000 0000 0000 0100 (z1 = 4)
+z2 = a | b;  // 0000 0000 0000 0111 (z2 = 7)
+z3 = a ^ b;  // 0000 0000 0000 0011 (z3 = 3)
+z4 = ~a;     // 1111 1111 1111 1010 (z4 = -6, nếu là int 16-bit)
+z5 = a >> 2; // 0000 0000 0000 0001 (z5 = 1)
+z6 = a << 2; // 0000 0000 0001 0100 (z6 = 20)
+                </code></pre>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">C. Các toán tử quan hệ</h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Dùng để so sánh 2 biểu thức.</li>
+                    <li>Kết quả trả về là $\mathbf{0}$ (false nếu sai) hoặc $\mathbf{1}$ (true nếu đúng).</li>
+                    <li>Toán tử: $\mathbf{==}$, $\mathbf{>}$, $\mathbf{<}$, $\mathbf{>=}$, $\mathbf{<=}$, $\mathbf{!=}$.</li>
+                </ul>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">D. Các toán tử luận lý</h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Dùng để tổ hợp nhiều biểu thức quan hệ với nhau.</li>
+                    <li>Toán tử: $\mathbf{&&}$ (and), $\mathbf{||}$ (or), $\mathbf{!}$ (not).</li>
+                </ul>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                    <table class="table-borderless">
+                        <tr> <td><b>&&</b></td> <td><b>0</b></td> <td><b>1</b></td> </tr>
+                        <tr> <td><b>0</b></td> <td>0</td> <td>0</td> </tr>
+                        <tr> <td><b>1</b></td> <td>0</td> <td>1</td> </tr>
+                    </table>
+                    <table class="table-borderless">
+                        <tr> <td><b>||</b></td> <td><b>0</b></td> <td><b>1</b></td> </tr>
+                        <tr> <td><b>0</b></td> <td>0</td> <td>1</td> </tr>
+                        <tr> <td><b>1</b></td> <td>1</td> <td>1</td> </tr>
+                    </table>
+                </div>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">E. Toán tử điều kiện (Toán tử 3 ngôi)</h4>
+                <p class="mb-4 leading-relaxed">Đây là toán tử có 3 toán hạng.</p>
+                <p class="mb-2"><strong>Cú pháp:</strong></p>
+                <div class="text-center my-4 p-4 bg-gray-100 rounded shadow-inner overflow-x-auto">
+                    $$\mathbf{<biểu thức 1> ? <biểu thức 2> : <biểu thức 3>}$$
+                </div>
+                <p class="mb-2"><strong>Quy tắc:</strong></p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Nếu &lt;biểu thức 1&gt; đúng $\to$ giá trị là &lt;biểu thức 2&gt;.</li>
+                    <li>Nếu &lt;biểu thức 1&gt; sai $\to$ giá trị là &lt;biểu thức 3&gt;.</li>
+                </ul>
+                <p><strong>Ví dụ:</strong> <code class="bg-gray-200 px-2 py-1 rounded">s1 = (1 > 2) ? 2912 : 1706;</code> (s1 sẽ nhận giá trị 1706).</p>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">F. Toán tử phẩy (,)</h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Các biểu thức con đặt cách nhau bằng dấu phẩy.</li>
+                    <li>Các biểu thức con lần lượt được tính từ trái sang phải.</li>
+                    <li>Biểu thức mới nhận được là giá trị của biểu thức bên phải cùng.</li>
+                </ul>
+                <p><strong>Ví dụ:</strong></p>
+                <div class="my-4 p-4 bg-gray-100 rounded shadow-inner overflow-x-auto">
+                    $$x = (a++, b = b + 2); \Leftrightarrow \mathbf{a++; b = b + 2; x = b;}$$
+                </div>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.6. Độ ưu tiên của các toán tử</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Quy tắc:</strong> Thực hiện biểu thức trong <code class="bg-gray-200 px-2 py-1 rounded">()</code> sâu nhất trước, sau đó theo thứ tự ưu tiên các toán tử.</li>
+                    <li><strong>Lời khuyên:</strong> Tự chủ động thêm <code class="bg-gray-200 px-2 py-1 rounded">()</code> để đảm bảo thứ tự mong muốn.</li>
+                    <li><strong>Ví dụ:</strong>
+                        <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                            <li><code class="bg-gray-200 px-2 py-1 rounded">n = 2 + 3 * 5;</code> $\to$ <code class="bg-gray-200 px-2 py-1 rounded">n = 2 + (3 * 5);</code></li>
+                            <li><code class="bg-gray-200 px-2 py-1 rounded">a > 1 && b < 2</code> $\to$ <code class="bg-gray-200 px-2 py-1 rounded">(a > 1) && (b < 2)</code></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.7. Câu lệnh (Statement)</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Khái niệm:</strong> Là một chỉ thị trực tiếp, hoàn chỉnh nhằm ra lệnh cho máy tính thực hiện một số tác vụ nhất định.</li>
+                    <li>Trình biên dịch bỏ qua các khoảng trắng (hay tab hoặc xuống dòng) chen giữa lệnh.</li>
+                    <li><strong>Phân loại:</strong>
+                        <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                            <li><strong>Câu lệnh đơn:</strong> Chỉ gồm một câu lệnh. Ví dụ: <code class="bg-gray-200 px-2 py-1 rounded">a = 2912;</code>.</li>
+                            <li><strong>Câu lệnh phức (khối lệnh):</strong> Gồm nhiều câu lệnh đơn được bao bởi $\mathbf{{}$ và $\mathbf{}}$.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- PHẦN 2: NỘI DUNG CHI TIẾT - Mục 3 -->
+            <section id="section4" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">4. CÁC LỆNH NHẬP XUẤT (INPUT/OUTPUT)</h2>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Thiết bị nhập chuẩn thường là bàn phím.</li>
+                    <li>Thiết bị xuất chuẩn thường là màn hình.</li>
+                    <li>Nhập và xuất có thể được xử lý qua các tập tin thay vì từ các thiết bị chuẩn.</li>
+                    <li>Luồng nhập/xuất chuẩn được xử lý qua thư viện <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">iostream</code>.
+                        <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                            <li>Lệnh nhập: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">cin</code>.</li>
+                            <li>Lệnh xuất: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">cout</code>.</li>
+                        </ul>
+                    </li>
+                    <li class="mt-2"><strong>Thư viện:</strong> Phải khai báo <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">#include &lt;iostream&gt;</code>.</li>
+                    <li><strong>Toán tử I/O:</strong>
+                        <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                            <li>Toán tử xuất là <code class="bg-gray-200 text-red-600 px-2 py-1 rounded"><<</code>.</li>
+                            <li>Toán tử nhập là <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">>></code>.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3.1. Ký tự điều khiển (Escape Sequence)</h3>
+                <p class="mb-4 leading-relaxed">Gồm dấu $\mathbf{\backslash}$ và một ký tự.</p>
+                <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                    <table>
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th>Ký tự điều khiển</th>
+                                <th>Ý nghĩa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="font-mono">\a</td><td>Tiếng chuông</td></tr>
+                            <tr><td class="font-mono">\b</td><td>Lùi lại một bước</td></tr>
+                            <tr><td class="font-mono">\n</td><td>Xuống dòng</td></tr>
+                            <tr><td class="font-mono">\t</td><td>Dấu tab</td></tr>
+                            <tr><td class="font-mono">\\</td><td>In dấu \</td></tr>
+                            <tr><td class="font-mono">\?</td><td>In dấu ?</td></tr>
+                            <tr><td class="font-mono">\"</td><td>In dấu "</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><strong>Ví dụ:</strong> <code class="bg-gray-200 px-2 py-1 rounded">cout<<“\t”;</code>, <code class="bg-gray-200 px-2 py-1 rounded">cout<<“\n”;</code>.</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3.2. Định dạng xuất (Formatting Output)</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Thư viện:</strong> Phải khai báo <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">#include "iomanip"</code>.</li>
+                    <li><code class="bg-gray-200 text-red-600 px-2 py-1 rounded">setw(n)</code>: Thiết lập độ rộng trường xuất là $n$ ký tự.</li>
+                    <li><code class="bg-gray-200 text-red-600 px-2 py-1 rounded">endl</code>: Tương đương với xuống dòng \n.</li>
+                    <li><code class="bg-gray-200 text-red-600 px-2 py-1 rounded">setprecision(n)</code>: Thiết lập độ chính xác (số chữ số sau dấu thập phân).</li>
+                    <li><code class="bg-gray-200 text-red-600 px-2 py-1 rounded">fixed</code>: Dùng với <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">setprecision</code> để đảm bảo số thập phân cố định.</li>
+                </ul>
+                <p class="mt-4 mb-4"><strong>Ví dụ mã minh họa định dạng:</strong></p>
+                <pre><code class="language-cpp">
+#include "iomanip"
+using namespace std; // Cần có để dùng cout, endl
+
+int a = 1706;
+float x = 176.85564774;
+
+cout << setw(10) << a << endl;
+// Output:       1706 (6 khoảng trắng + 1706)
+
+cout << setprecision(2) << fixed;
+cout << setw(10) << x << endl;
+// Output:     176.86 (4 khoảng trắng + 176.86 - lưu ý làm tròn)
+
+cout << setprecision(2) << fixed << x << endl;
+// Output: 176.86
+                </code></pre>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3.3. Một số hàm hữu ích khác (Thư viện Toán học)</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Thư viện:</strong> Phải khai báo <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">#include &lt;math.h&gt;</code>.</li>
+                    <li>Các hàm thường nhận <code class="bg-gray-200 px-2 py-1 rounded">double</code> và trả về <code class="bg-gray-200 px-2 py-1 rounded">double</code>.</li>
+                    <li><strong>Hàm 1 đầu vào:</strong> <code class="bg-gray-200 px-2 py-1 rounded">acos</code>, <code class="bg-gray-200 px-2 py-1 rounded">sin</code>, <code class="bg-gray-200 px-2 py-1 rounded">exp</code>, <code class="bg-gray-200 px-2 py-1 rounded">log</code>, <code class="bg-gray-200 px-2 py-1 rounded">sqrt</code> (căn bậc hai), <code class="bg-gray-200 px-2 py-1 rounded">ceil</code> (làm tròn lên), <code class="bg-gray-200 px-2 py-1 rounded">floor</code> (làm tròn xuống), <code class="bg-gray-200 px-2 py-1 rounded">abs</code> (trị tuyệt đối int), <code class="bg-gray-200 px-2 py-1 rounded">fabs</code> (trị tuyệt đối float/double).</li>
+                    <li><strong>Hàm 2 đầu vào:</strong> $\mathbf{double \ pow(double \ x, double \ y)}$ (Tính $x^y$).</li>
+                </ul>
+                <p class="mt-4 mb-4"><strong>Ví dụ sử dụng hàm pow (Lưu ý về kiểu dữ liệu):</strong></p>
+                <pre><code class="language-cpp">
+int x = 4, y = 3;
+
+float kq2 = pow(x, y); // kq2 = 64.0 (4^3)
+
+// Cẩn thận: 1/3 là phép chia SỐ NGUYÊN, kết quả là 0
+float kq3 = pow(x, 1/3); // kq3 = pow(4, 0) = 1.0
+
+// Kết quả đúng:
+float kq4 = pow(x, 1.0/3.0); // kq4 = 1.587... (căn bậc 3 của 4)
+                </code></pre>
+            </section>
+
+            <!-- PHẦN 3: BÀI TẬP VÀ ỨNG DỤNG -->
+            <section id="section5" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">5. BÀI TẬP VÀ ỨNG DỤNG</h2>
+                
+                <!-- Bài 6 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 6: Nhập năm sinh và tính tuổi</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Tuổi = $2015$ – NamSinh (Giả sử năm hiện tại là 2015).</p>
+                    <p class="mb-2"><strong>Code mẫu:</strong></p>
+                    <pre><code class="language-cpp">
+#include &lt;iostream&gt;
+using namespace std;
+void main()
+{
+    int NamSinh, Tuoi;
+    cout << "Nhap nam sinh: ";
+    cin >> NamSinh;
+    Tuoi = 2015 - NamSinh; // Sử dụng năm 2015 như trong bài giảng
+    cout << "Tuoi cua ban la " << Tuoi;
+}
+                    </code></pre>
+                </div>
+
+                <!-- Bài 7 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 7: Tính tổng, hiệu, tích, thương 2 số a và b</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Tong = a + b; Hieu = a – b; Tich = a * b; Thuong = a / b.</p>
+                    <p class="text-red-600 italic">Lưu ý: <code class="bg-gray-200 px-2 py-1 rounded">Thuong = a / b</code> sẽ là phép chia số nguyên nếu a và b đều là <code class="bg-gray-200 px-2 py-1 rounded">int</code>. Cần ép kiểu sang <code class="bg-gray-200 px-2 py-1 rounded">float</code> để có kết quả chính xác.</p>
+                </div>
+                
+                <!-- Bài 8 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 8: Tính tiền và thuế giá trị gia tăng (VAT)</h4>
+                    <p class="mb-2"><strong>Công thức:</strong></p>
+                    <div class="my-4 p-4 bg-white rounded shadow-inner overflow-x-auto">
+                        $$\mathbf{Tiền = \text{số lượng} \times \text{đơn giá}}$$
+                        $$\mathbf{\text{thuế giá trị gia tăng} = 10\% \times \text{Tiền}}$$
+                    </div>
+                     <p class="mb-2"><strong>Code mẫu (Trích đoạn):</strong></p>
+                    <pre><code class="language-cpp">
+// ...
+float Tien, VAT, SoLuong, DonGia;
+// ... (Nhập SoLuong, DonGia)
+Tien = SoLuong * DonGia;
+VAT = Tien * 0.1; // Hoặc Tien * 10 / 100
+// ... (Xuất kết quả)
+                    </code></pre>
+                </div>
+
+                <!-- Bài 9 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 9: Tính điểm trung bình (DTB)</h4>
+                    <p class="mb-2"><strong>Công thức:</strong></p>
+                    <div class="text-center my-4 p-4 bg-white rounded shadow-inner overflow-x-auto">
+                        $$\mathbf{\text{DTB} = \frac{(T \times \text{HsT} + L \times \text{HsL} + H \times \text{HsH})}{(\text{HsT} + \text{HsL} + \text{HsH})}}$$
+                    </div>
+                    <p><strong>Lưu ý:</strong> Sử dụng kiểu <code class="bg-gray-200 px-2 py-1 rounded">float</code> hoặc <code class="bg-gray-200 px-2 py-1 rounded">double</code> cho DTB để lưu kết quả số thực.</p>
+                </div>
+
+                <!-- Bài 10 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 10: Tính chu vi và diện tích hình tròn</h4>
+                    <p class="mb-2"><strong>Hằng số:</strong> Khai báo <code class="bg-gray-200 px-2 py-1 rounded">#define PI 3.14</code> hoặc <code class="bg-gray-200 px-2 py-1 rounded">const float PI = 3.1415;</code>.</p>
+                    <p class="mb-2"><strong>Công thức:</strong></p>
+                    <div class="my-4 p-4 bg-white rounded shadow-inner overflow-x-auto">
+                        $$\mathbf{\text{ChuVi} = 2 \times \text{PI} \times R}$$
+                        $$\mathbf{\text{DienTich} = \text{PI} \times R \times R}$$
+                    </div>
+                </div>
+
+                <!-- Bài 11 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 11: Tính số nút của biển số xe (4 chữ số)</h4>
+                    <p class="mb-2"><strong>Mục tiêu:</strong> Tính tổng các chữ số, sau đó lấy phần dư khi chia cho 10.</p>
+                    <p class="mb-2"><strong>Thuật toán tách số (Sử dụng toán tử % và /):</strong></p>
+                    <pre><code class="language-cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+void main()
+{
+    int n; // Bien so xe (4 so)
+    int n1, n2, n3, n4, SoNut;
+
+    cout << "Nhap bien so xe (4 chu so): ";
+    cin >> n;
+
+    n4 = n % 10; n = n / 10; // Tách chữ số cuối (hàng đơn vị)
+    n3 = n % 10; n = n / 10; // Tách chữ số hàng chục
+    n2 = n % 10; n = n / 10; // Tách chữ số hàng trăm
+    n1 = n; // Chữ số còn lại (hàng nghìn)
+
+    SoNut = (n1 + n2 + n3 + n4) % 10; // Công thức tính số nút
+    
+    cout << "So nut cua xe la: " << SoNut;
+}
+                    </code></pre>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-8 bg-gray-800 text-gray-400 mt-12">
+        <p>&copy; 2025 | Tài liệu học tập môn Nhập môn Lập trình.</p>
+    </footer>
+
+    <!-- Prism.js cho syntax highlighting -->
+    <!-- 1. Tải Core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" xintegrity="sha512-9khQRAUBYEJDCDVP2owVf/ciEwclIZUPutG8GCEOPV8KAeS41s9TfAudWMAWAzspHHLRaOevrU8fE7s9DCBOOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 2. Tải Autoloader để tự động nhận diện ngôn ngữ (C, C++, Pseudocode) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" xintegrity="sha512-SkmBfuA2hqjzEVpbaK+wTBpHeqM2mN/0A5EgTMZPKPLyN+3oR9jBEOKzT6K0LA/OBOuKJv9unNLJcfhE+K9rCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+</html>

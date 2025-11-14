@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài giảng: Cấu trúc Điều kiện & Rẽ nhánh C++</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tải MathJax để hiển thị công thức LaTeX -->
+    <!-- 1. Cấu hình MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- 2. Tải script MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS cho Prism.js (Syntax Highlighting - Theme Okaidia) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" xintegrity="sha512-mIs9kKbaw6JrqdefaultImIKwD6rdMMjgNsJqdPLUEVBOxtSRhQjhpLSRYMbBOEaMbM8dcGchjlowkVYdPaODeWYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* Màu nền xám xanh nhẹ */
+        }
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a5b4fc; /* Màu tím nhạt của indigo-300 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #818cf8; /* Màu tím của indigo-400 */
+        }
+        
+        /* Style cho mục lục */
+        .toc-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+        .toc-link:hover {
+            background-color: #ecfdf5; /* Nền xanh lá cây rất nhạt (emerald-50) */
+            color: #047857; /* Chữ xanh lá cây (emerald-700) */
+            border-left-color: #059669; /* Viền xanh lá cây (emerald-600) */
+            transform: translateX(4px);
+        }
+
+        /* Tùy chỉnh style cho bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #fdfdfe;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header của bài giảng -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 py-10">
+            <h1 class="text-4xl font-bold mb-2">BÀI GIẢNG: CẤU TRÚC ĐIỀU KIỆN VÀ RẼ NHÁNH</h1>
+            <h2 class="text-2xl font-semibold opacity-90">Môn học: Nhập môn Lập trình (C & C++)</h2>
+            <div class="mt-6 border-t border-emerald-400 opacity-80 pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
+                <p class="font-medium">Giảng viên: Nguyễn Chí Cường</p>
+                <p class="font-medium mt-1 sm:mt-0">Ngôn ngữ: C & C++</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Thân trang: Mục lục (trái) và Nội dung (phải) -->
+    <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-12">
+
+        <!-- Cột Mục lục (Sidebar) -->
+        <aside class="md:col-span-1 md:sticky md:top-8 self-start">
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold text-emerald-700 mb-5 border-b-2 border-emerald-200 pb-3">Nội Dung Chính</h3>
+                <nav>
+                    <ul class="space-y-2">
+                        <li><a href="#section1" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">I. Câu lệnh IF</a></li>
+                        <li><a href="#section2" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">II. Câu lệnh SWITCH</a></li>
+                        <li><a href="#section3" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">III. Kinh nghiệm</a></li>
+                        <li><a href="#section4" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">IV. Ví dụ & Thuật toán</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Cột Nội dung chính -->
+        <main class="md:col-span-3">
+
+            <!-- PHẦN 1: CÂU LỆNH IF -->
+            <section id="section1" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">I. CÂU LỆNH ĐIỀU KIỆN IF</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">1. Mục đích và Khái niệm</h3>
+                <p class="mb-4 leading-relaxed">Các câu lệnh điều kiện cho phép chúng ta thay đổi hướng thực hiện của chương trình. Một câu lệnh điều kiện sẽ trả về giá trị đúng hoặc sai.</p>
+                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-lg">
+                    <p class="font-semibold text-emerald-800 mb-2">Ví dụ thực tế: Để xác định một số là số chẵn hay số lẻ:</p>
+                    <ul class="list-disc list-outside pl-6 space-y-2 leading-relaxed">
+                        <li>Nhập vào một số.</li>
+                        <li>Chia số đó cho 2 để xác định số dư.</li>
+                        <li>Nếu số dư là 0, số đó là “SỐ CHẴN”.</li>
+                        <li>Ngược lại, số dư không bằng 0, số đó là “SỐ LẺ”.</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2. Cú pháp Lệnh IF</h3>
+                <p class="mb-4 leading-relaxed">Biểu thức logic trong ngoặc đơn <code class="bg-gray-200 px-2 py-1 rounded">()</code> sẽ cho kết quả <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">sai = 0</code> hoặc <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">đúng ≠ 0</code>. Khối lệnh có thể là Câu lệnh đơn hoặc Câu lệnh phức (được kẹp giữa <code class="bg-gray-200 px-2 py-1 rounded">{</code> và <code class="bg-gray-200 px-2 py-1 rounded">}</code>).</p>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">2.1. Dạng 1 (Thiếu)</h4>
+                <p class="mb-4 leading-relaxed">Chỉ thực hiện hành động nếu điều kiện đúng.</p>
+                <p class="mb-2"><strong>Cú pháp:</strong></p>
+                <pre><code class="language-cpp">
+if (biểu thức điều kiện)
+    &lt;khối lệnh&gt;;
+                </code></pre>
+                <p class="mt-4 mb-4"><strong>Ví dụ Code (C++):</strong></p>
+                <pre><code class="language-cpp">
+// Ví dụ 1: Lệnh đơn
+if (a == 0)
+    cout << "a bang 0";
+
+// Ví dụ 2: Lệnh phức
+if (a == 0)
+{
+    cout << "a bang 0";
+    a = 2912;
+}
+                </code></pre>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">2.2. Dạng 2 (Đủ)</h4>
+                <p class="mb-4 leading-relaxed">Thực hiện hành động A nếu điều kiện đúng, và hành động B nếu điều kiện sai.</p>
+                <p class="mb-2"><strong>Cú pháp:</strong></p>
+                <pre><code class="language-cpp">
+if (biểu thức điều kiện)
+    &lt;khối lệnh 1&gt;;
+else
+    &lt;khối lệnh 2&gt;;
+                </code></pre>
+                <p class="mt-4 mb-4"><strong>Ví dụ Code (C++):</strong></p>
+                <pre><code class="language-cpp">
+// Ví dụ 1: Lệnh đơn
+if (a == 0)
+    cout << "a bang 0";
+else
+    cout << "a khac 0";
+
+// Ví dụ 2: Lệnh phức
+if (a == 0)
+{
+    cout << "a bang 0";
+    a = 2912;
+}
+else
+    cout << "a khac 0";
+                </code></pre>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3. Một số Lưu ý quan trọng khi dùng IF</h3>
+                <ul class="list-disc list-outside pl-6 space-y-3 mb-4 leading-relaxed">
+                    <li>Câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">if</code> và <code class="bg-gray-200 px-2 py-1 rounded">if… else</code> là một câu lệnh đơn.</li>
+                    <li>
+                        <strong>Câu lệnh if có thể lồng vào nhau.</strong> Trong trường hợp lồng nhau, từ khóa <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">else</code> sẽ tương ứng với <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">if</code> gần nó nhất.
+                        <pre><code class="language-cpp">
+// Ví dụ lồng nhau:
+if (a != 0)
+    if (b > 0)
+        cout << "a != 0 va b > 0";
+    else
+        cout << "a != 0 va b <= 0"; // else này của if (b > 0)
+                        </code></pre>
+                    </li>
+                    <li>
+                        <strong>Nên dùng <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">else</code> để loại trừ trường hợp.</strong> Điều này giúp chương trình rõ ràng hơn và tránh kiểm tra lại các điều kiện đã bị loại trừ.
+                        <pre><code class="language-cpp">
+// Ví dụ tối ưu hóa giải phương trình bậc hai:
+if (delta < 0)
+    cout << "PT vo nghiem";
+else // delta >= 0
+    if (delta == 0)
+        cout << "PT co nghiem kep";
+    else // delta > 0
+        cout << "PT co 2 nghiem";
+                        </code></pre>
+                    </li>
+                    <li class="font-semibold text-red-700">
+                        Tuyệt đối Không được thêm dấu chấm phẩy (;) sau điều kiện của if.
+                        <pre><code class="language-cpp">
+// VÍ DỤ SAI LOGIC:
+if (a != 0); // Lỗi logic: Dấu ; kết thúc lệnh if ngay tại đây
+cout << "a khac 0."; // Lệnh này luôn được thực thi
+                        </code></pre>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- PHẦN 2: CÂU LỆNH SWITCH -->
+            <section id="section2" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">II. CÂU LỆNH RẼ NHÁNH SWITCH</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">1. Khái niệm và Mục đích</h3>
+                <p class="mb-4 leading-relaxed">Lệnh <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">switch</code> là một bộ lựa chọn đa hướng. Nó so sánh giá trị của một biểu thức với một danh sách các hằng số nguyên hoặc hằng ký tự.</p>
+                <p class="mb-4 leading-relaxed">Khi gặp một sự so sánh khớp, các lệnh kết hợp với hằng đó được thực thi.</p>
+                <p class="p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-lg"><strong>Yêu cầu:</strong> Biến/Biểu thức trong <code class="bg-gray-200 px-2 py-1 rounded">switch()</code> phải là biến/biểu thức cho giá trị rời rạc (ví dụ: <code class="bg-gray-200 px-2 py-1 rounded">int</code>, <code class="bg-gray-200 px-2 py-1 rounded">char</code>).</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2. Cú pháp Lệnh SWITCH</h3>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">2.1. Dạng 1 (Thiếu)</h4>
+                <p class="mb-2"><strong>Cú pháp:</strong></p>
+                <pre><code class="language-cpp">
+switch (&lt;Biến/BT&gt;)
+{
+    case &lt;GT1&gt;:
+        &lt;Lệnh 1&gt;;
+        break;
+    case &lt;GT2&gt;:
+        &lt;Lệnh 2&gt;;
+        break;
+    // ...
+}
+                </code></pre>
+                <p class="mt-4 mb-4"><strong>Lưu ý:</strong> Lệnh <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">break;</code> được dùng để thoát khỏi khối <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">switch</code>.</p>
+                <p class="mt-4 mb-4"><strong>Ví dụ Code (C++):</strong></p>
+                <pre><code class="language-cpp">
+switch (a)
+{
+    case 1:
+        cout << "Mot";
+        break;
+    case 2:
+        cout << "Hai";
+        break;
+    case 3:
+        cout << "Ba";
+        break;
+}
+                </code></pre>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">2.2. Dạng 2 (Đủ - Có default)</h4>
+                <p class="mb-4 leading-relaxed">Khi giá trị của Biến/BT không khớp với bất kỳ <code class="bg-gray-200 px-2 py-1 rounded">case</code> nào, khối lệnh trong <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">default</code> sẽ được thực thi.</p>
+                <p class="mb-2"><strong>Cú pháp:</strong></p>
+                <pre><code class="language-cpp">
+switch (&lt;Biến/BT&gt;)
+{
+    case &lt;GT1&gt;:
+        &lt;Lệnh 1&gt;;
+        break;
+    case &lt;GT2&gt;:
+        &lt;Lệnh 2&gt;;
+        break;
+    // ...
+    default:
+        &lt;Lệnh n&gt;;
+}
+                </code></pre>
+                 <p class="mt-4 mb-4"><strong>Ví dụ Code (C++):</strong></p>
+                <pre><code class="language-cpp">
+switch (a)
+{
+    case 1:
+        cout << "Mot";
+        break;
+    case 2:
+        cout << "Hai";
+        break;
+    case 3:
+        cout << "Ba";
+        break;
+    default:
+        cout << "Ko biet";
+}
+                </code></pre>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3. Một số Lưu ý quan trọng khi dùng SWITCH</h3>
+                <ul class="list-disc list-outside pl-6 space-y-3 mb-4 leading-relaxed">
+                    <li>Câu lệnh <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">switch</code> là một câu lệnh đơn và có thể lồng nhau.</li>
+                    <li>Các giá trị trong mỗi trường hợp (<code class="bg-gray-200 px-2 py-1 rounded">case</code>) phải khác nhau.</li>
+                    <li>
+                        <strong>Nguyên tắc thực thi:</strong> <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">switch</code> sẽ nhảy đến <code class="bg-gray-200 px-2 py-1 rounded">case</code> tương ứng và thực hiện đến khi nào gặp <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">break</code> hoặc cuối <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">switch</code> sẽ kết thúc.
+                    </li>
+                    <li>
+                        <strong>Tận dụng tính chất khi bỏ <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">break;</code>:</strong> Có thể gộp nhiều <code class="bg-gray-200 px-2 py-1 rounded">case</code> vào chung một khối lệnh thực thi.
+                        <pre><code class="language-cpp">
+// Ví dụ: Gộp số lẻ/số chẵn:
+switch (a)
+{
+    case 1:
+    case 3:
+        cout << "So le";
+        break;
+    case 2:
+    case 4:
+        cout << "So chan";
+        break;
+}
+                        </code></pre>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- PHẦN 3: KINH NGHIỆM LẬP TRÌNH -->
+            <section id="section3" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">III. KINH NGHIỆM LẬP TRÌNH</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">1. So sánh IF và SWITCH</h3>
+                <p class="mb-4 leading-relaxed">Nên chọn cấu trúc phù hợp với loại điều kiện kiểm tra.</p>
+                <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                    <table>
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th>Tiêu chí</th>
+                                <th>Câu lệnh if</th>
+                                <th>Câu lệnh switch</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold">Phạm vi</td>
+                                <td>Kiểm tra bất kỳ biểu thức logic nào (so sánh bằng, lớn hơn, nhỏ hơn, điều kiện phức tạp...).</td>
+                                <td>Chỉ kiểm tra sự bằng nhau của một biểu thức/biến duy nhất với các giá trị hằng số rời rạc (số nguyên, ký tự).</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Tính ứng dụng</td>
+                                <td>Phù hợp khi cần kiểm tra các điều kiện không liên tục, so sánh phức tạp (ví dụ: <code class="bg-gray-200 px-2 py-1 rounded">a == 3.14</code> hoặc <code class="bg-gray-200 px-2 py-1 rounded">a < 10</code>).</td>
+                                <td>Ưu tiên sử dụng khi cần kiểm tra nhiều điều kiện so sánh bằng nhau trên cùng một biến.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- PHẦN 4: VÍ DỤ VÀ THUẬT TOÁN -->
+            <section id="section4" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">IV. CÁC THUẬT TOÁN VÀ VÍ DỤ MINH HỌA</h2>
+                <p class="mb-6 leading-relaxed">Dưới đây là các thuật toán và công thức được cung cấp trong tài liệu cho các bài tập điển hình:</p>
+
+                <!-- Bài tập 2 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 2: Đổi chữ thường sang chữ hoa và ngược lại</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Dựa trên bảng mã ASCII, khoảng cách giữa chữ hoa và chữ thường là 32.</p>
+                    <pre><code class="language-cpp">
+char ch;
+// ... (Nhập ch)
+if (ch >= 'a' && ch <= 'z') // Nếu là chữ thường
+    ch = ch - 32; // Chuyển sang hoa (Trừ 32)
+else
+    if (ch >= 'A' && ch <= 'Z') // Nếu là chữ hoa
+        ch = ch + 32; // Chuyển sang thường (Cộng 32)
+        
+cout << "Ky tu sau khi doi: " << ch;
+                    </code></pre>
+                </div>
+
+                <!-- Bài tập 3 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 3: Giải phương trình bậc nhất $ax + b = 0$</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Cấu trúc <code class="bg-gray-200 px-2 py-1 rounded">if</code> lồng nhau để xử lý các trường hợp của $a$ và $b$.</p>
+                    <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                        <li><strong>Kiểm tra hệ số $a$:</strong>
+                            <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                                <li>Nếu $a = 0$:
+                                    <ul class="list-disc list-outside pl-6 mt-1 space-y-1">
+                                        <li><strong>Kiểm tra $b$:</strong> Nếu $b = 0$ $\to$ Phương trình Vô Số Nghiệm (VSN).</li>
+                                        <li>Ngược lại ($b \neq 0$) $\to$ Phương trình Vô Nghiệm (VN).</li>
+                                    </ul>
+                                </li>
+                                <li>Ngược lại ($a \neq 0$):
+                                     <ul class="list-disc list-outside pl-6 mt-1 space-y-1">
+                                        <li>Nghiệm là: $x = \frac{-b}{a}$.</li>
+                                        <li>Code: <code class="bg-gray-200 px-2 py-1 rounded">cout << "Nghiem = " << float(-b)/a;</code></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Bài tập 5 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 5: Tìm số nhỏ nhất (min) trong 4 số $a, b, c, d$</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Sử dụng biến tạm <code class="bg-gray-200 px-2 py-1 rounded">min</code> và cập nhật nó qua các phép so sánh độc lập.</p>
+                     <pre><code class="language-cpp">
+// ... (Nhập a, b, c, d)
+int min = a; // 1. Khởi tạo: min = a
+
+if (b < min) // 2. So sánh với b
+    min = b;
+    
+if (c < min) // 3. So sánh với c
+    min = c;
+    
+if (d < min) // 4. So sánh với d
+    min = d;
+
+cout << "So nho nhat la: " << min; // 5. Kết quả
+                    </code></pre>
+                </div>
+                
+                <!-- Bài tập 7 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 7: Tính tiền đi taxi theo số km nhập vào ($n$)</h4>
+                    <p class="mb-2"><strong>Thuật toán (Bắt buộc phải nhớ công thức):</strong></p>
+                    <h5 class="font-semibold text-gray-700 mt-4 mb-2">A. Khai báo hằng số giá tiền:</h5>
+                    <ul class="list-disc list-outside pl-6 space-y-1 mb-4 leading-relaxed">
+                        <li>Giá 1km đầu: <code class="bg-gray-200 px-2 py-1 rounded">G1 = 15000</code> (đ).</li>
+                        <li>Giá km thứ 2 đến thứ 5: <code class="bg-gray-200 px-2 py-1 rounded">G2 = 13500</code> (đ).</li>
+                        <li>Giá km thứ 6 trở đi: <code class="bg-gray-200 px-2 py-1 rounded">G3 = 11000</code> (đ).</li>
+                    </ul>
+                    <h5 class="font-semibold text-gray-700 mt-4 mb-2">B. Công thức tính tổng tiền ($T$) theo số km ($n$):</h5>
+                    <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                        <table>
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th>Điều kiện $n$</th>
+                                    <th>Công thức tính $T$</th>
+                                    <th>Chi tiết thuật toán</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-mono">$n = 1$</td>
+                                    <td class="font-mono">T = G1</td>
+                                    <td>1 km đầu giá $G1$</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono">$2 \leq n \leq 5$</td>
+                                    <td class="font-mono">T = G1 + (n – 1) * G2;</td>
+                                    <td>$G1$ cho km đầu, $(n-1)$ km còn lại giá $G2$</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono">$n > 5$</td>
+                                    <td class="font-mono">T = G1 + 4 * G2 + (n – 5) * G3;</td>
+                                    <td>$G1$ (km 1) + $4 \times G2$ (km 2-5) + $(n-5)$ km còn lại giá $G3$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h5 class="font-semibold text-gray-700 mt-4 mb-2">C. Giảm giá:</h5>
+                    <ul class="list-disc list-outside pl-6 space-y-1 mb-4 leading-relaxed">
+                         <li>Nếu $n > 120$ (trên 120km), tổng tiền $T$ được giảm 10%.</li>
+                         <li>Công thức giảm giá: <code class="bg-gray-200 px-2 py-1 rounded">T = T * 0.9;</code>.</li>
+                    </ul>
+                </div>
+
+                <!-- Tóm tắt -->
+                <div class="mt-10 pt-6 border-t border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">Tóm tắt và Liên hệ</h3>
+                    <p class="mb-4 leading-relaxed italic text-gray-600">
+                        Cấu trúc điều kiện (<code class="bg-gray-200 px-2 py-1 rounded">if</code>) và cấu trúc rẽ nhánh (<code class="bg-gray-200 px-2 py-1 rounded">switch</code>) giống như các ngã rẽ trong một bản đồ lập trình. Lệnh <code class="bg-gray-200 px-2 py-1 rounded">if</code> cung cấp sự linh hoạt để kiểm tra mọi loại điều kiện phức tạp (giống như chọn đường dựa trên nhiều yếu tố: thời tiết, kẹt xe, khoảng cách). Ngược lại, lệnh <code class="bg-gray-200 px-2 py-1 rounded">switch</code> hiệu quả hơn khi bạn chỉ cần so sánh một điểm dữ liệu với một danh sách cố định các địa điểm đã biết (giống như chọn ga tàu dựa trên số tuyến cụ thể). Việc chọn đúng cấu trúc giúp tối ưu hóa luồng thực thi của chương trình.
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-8 bg-gray-800 text-gray-400 mt-12">
+        <p>&copy; 2025 | Tài liệu học tập môn Nhập môn Lập trình.</p>
+    </footer>
+
+    <!-- Prism.js cho syntax highlighting -->
+    <!-- 1. Tải Core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" xintegrity="sha512-9khQRAUBYEJDCDVP2owVf/ciEwclIZUPutG8GCEOPV8KAeS41s9TfAudWMAWAzspHHLRaOevrU8fE7s9DCBOOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 2. Tải Autoloader để tự động nhận diện ngôn ngữ (C, C++, Pseudocode) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" xintegrity="sha512-SkmBfuA2hqjzEVpbaK+wTBpHeqM2mN/0A5EgTMZPKPLyN+3oR9jBEOKzT6K0LA/OBOuKJv9unNLJcfhE+K9rCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+</html>

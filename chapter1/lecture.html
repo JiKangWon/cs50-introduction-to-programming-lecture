@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài giảng: Giới thiệu NNLT C++</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tải MathJax để hiển thị công thức LaTeX -->
+    <!-- 1. Cấu hình MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams' // Thêm hỗl trợ đánh số công thức
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- 2. Tải script MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS cho Prism.js (Syntax Highlighting) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" xintegrity="sha512-mIs9kKbaw6JrqdefaultImIKwD6rdMMjgNsJqdPLUEVBOxtSRhQjhpLSRYMbBOEaMbM8dcGchjlowkVYdPaODeWYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* Màu nền xám xanh nhẹ */
+        }
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a5b4fc; /* Màu tím nhạt của indigo-300 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #818cf8; /* Màu tím của indigo-400 */
+        }
+        
+        /* Cập nhật style cho code block - Đã BỊ XÓA, Prism.js sẽ xử lý */
+        /* pre { ... } */
+        
+        /* Style cho mục lục */
+        .toc-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+        .toc-link:hover {
+            background-color: #ecfdf5; /* Nền xanh lá cây rất nhạt (emerald-50) */
+            color: #047857; /* Chữ xanh lá cây (emerald-700) */
+            border-left-color: #059669; /* Viền xanh lá cây (emerald-600) */
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header của bài giảng -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 py-10">
+            <h1 class="text-4xl font-bold mb-2">BÀI GIẢNG MÔN HỌC NHẬP MÔN LẬP TRÌNH</h1>
+            <h2 class="text-2xl font-semibold opacity-90">CHƯƠNG 1: GIỚI THIỆU TỔNG QUAN NGÔN NGỮ LẬP TRÌNH C++</h2>
+            <div class="mt-6 border-t border-emerald-400 opacity-80 pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
+                <p class="font-medium">Giảng viên: Nguyễn Chí Cường</p>
+                <p class="font-medium mt-1 sm:mt-0">Ngôn ngữ: C & C++</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Thân trang: Mục lục (trái) và Nội dung (phải) -->
+    <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-12">
+
+        <!-- Cột Mục lục (Sidebar) -->
+        <aside class="md:col-span-1 md:sticky md:top-8 self-start">
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold text-emerald-700 mb-5 border-b-2 border-emerald-200 pb-3">Mục Lục</h3>
+                <nav>
+                    <ul class="space-y-2">
+                        <li><a href="#section1" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">1. Ngôn ngữ lập trình</a></li>
+                        <li><a href="#section2" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">2. Các khái niệm cơ bản</a></li>
+                        <li><a href="#section3" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">3. Xây dựng chương trình</a></li>
+                        <li><a href="#section4" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">4. Giới thiệu C/C++</a></li>
+                        <li><a href="#section5" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">5. Bộ từ vựng & Cấu trúc</a></li>
+                        <li><a href="#section6" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">6. Bài tập & Ứng dụng</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Cột Nội dung chính -->
+        <main class="md:col-span-3">
+
+            <!-- Mỗi section là một "card" nội dung -->
+            <section id="section1" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">1. NGÔN NGỮ LẬP TRÌNH</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">1.1. Định nghĩa Ngôn ngữ Lập trình</h3>
+                <p class="mb-4 leading-relaxed">Ngôn ngữ lập trình (Programming Language) là một tập con của ngôn ngữ máy tính.</p>
+                <p class="mb-4 leading-relaxed">Ngôn ngữ lập trình là một dạng ngôn ngữ được thiết kế và chuẩn hóa (đối lập với ngôn ngữ tự nhiên) để truyền các chỉ thị cho máy tính (hoặc máy khác có bộ xử lí).</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">1.2. Phân loại Ngôn ngữ Lập trình</h3>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">1.2.1. Ngôn ngữ lập trình cấp thấp</h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Ngôn ngữ máy (Machine Language):</strong> Là ngôn ngữ làm việc của CPU, được biểu diễn dưới dạng số nhị phân. <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">00101011</code>.</li>
+                    <li><strong>Hợp ngữ (Assembly Language):</strong> Là dạng ngôn ngữ máy đã cải tiến bằng cách dùng mã gợi nhớ (mnemonic) thay cho số nhị phân để biểu diễn mã tác vụ và toán hạng.</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">1.2.2. Ngôn ngữ lập trình cấp cao (High-level Language)</h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 leading-relaxed">
+                    <li>Ngôn ngữ lập trình cấp cao giúp con người viết chương trình dễ dàng, nhanh chóng hơn hợp ngữ.</li>
+                    <li>Nó sử dụng lệnh dễ hiểu, gần gũi với ngôn ngữ của con người hoặc công thức toán.</li>
+                    <li>Chương trình viết bằng ngôn ngữ cấp cao cần phải dịch trước ra ngôn ngữ máy rồi mới chạy được.</li>
+                </ul>
+            </section>
+
+            <section id="section2" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">2. CÁC KHÁI NIỆM CƠ BẢN</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">2.1. Lập trình máy tính (Programming)</h3>
+                <p class="mb-4 leading-relaxed">Lập trình máy tính (gọi tắt là lập trình) là nghệ thuật cài đặt một hoặc nhiều thuật toán trừu tượng có liên quan với nhau bằng một ngôn ngữ lập trình để tạo ra một chương trình máy tính.</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.2. Thuật toán (Algorithm)</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Định nghĩa:</strong> Thuật toán là tập hợp (dãy) hữu hạn các chỉ thị (hành động) được định nghĩa rõ ràng nhằm giải quyết một bài toán cụ thể nào đó.</li>
+                    <li>Độ phức tạp của thuật toán.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.3. Các tính chất của thuật toán</h3>
+                <p class="mb-4 leading-relaxed">Thuật toán bao gồm 5 tính chất quan trọng:</p>
+                <ol class="list-decimal list-outside pl-6 space-y-2 mb-4 leading-relaxed font-medium">
+                    <li><strong>Tính chính xác:</strong> Quá trình tính toán hay các thao tác máy tính thực hiện phải chính xác.</li>
+                    <li><strong>Tính rõ ràng:</strong> Các câu lệnh minh bạch được sắp xếp theo thứ tự nhất định.</li>
+                    <li><strong>Tính khách quan:</strong> Được viết bởi nhiều người trên máy tính nhưng kết quả phải như nhau.</li>
+                    <li><strong>Tính phổ dụng:</strong> Có thể áp dụng cho một lớp các bài toán có đầu vào tương tự nhau.</li>
+                    <li><strong>Tính kết thúc:</strong> Phải hữu hạn các bước tính toán.</li>
+                </ol>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2.4. Ví dụ về Thuật toán: Giải phương trình bậc nhất $ax + b = 0$</h3>
+                <div class="bg-emerald-50 border-l-4 border-emerald-500 p-6 rounded-lg">
+                    <p class="mb-2"><strong>Đầu vào:</strong> $a, b$ thuộc $\mathbb{R}$.</p>
+                    <p class="mb-4"><strong>Đầu ra:</strong> nghiệm phương trình $ax + b = 0$.</p>
+                    <p class="font-semibold mb-2">Các bước logic:</p>
+                    <ul class="list-disc list-outside pl-6 space-y-2 leading-relaxed">
+                        <li>Nếu $a = 0$:
+                            <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                                <li>Nếu $b = 0$ thì PT có nghiệm bất kì (Vô số nghiệm).</li>
+                                <li>Nếu $b \neq 0$ thì PT vô nghiệm.</li>
+                            </ul>
+                        </li>
+                        <li class="mt-2">Nếu $a \neq 0$:
+                            <ul class="list-circle list-outside pl-6 mt-2 space-y-1">
+                                <li>PT có nghiệm duy nhất $x = -b/a$.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section3" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">3. CÁC BƯỚC XÂY DỰNG CHƯƠNG TRÌNH VÀ BIỂU DIỄN THUẬT TOÁN</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">3.1. Các bước xây dựng chương trình</h3>
+                <p class="mb-4 leading-relaxed">Các bước xây dựng một chương trình máy tính bao gồm:</p>
+                <ol class="list-decimal list-outside pl-6 space-y-2 mb-4 leading-relaxed bg-gray-50 p-6 rounded-lg">
+                    <li>Xác định vấn đề (bài toán).</li>
+                    <li>Lựa chọn phương pháp giải.</li>
+                    <li>Xây dựng thuật toán/thuật giải.</li>
+                    <li>Cài đặt chương trình.</li>
+                    <li>Hiệu chỉnh chương trình (Tìm và sửa Lỗi cú pháp và Lỗi ngữ nghĩa).</li>
+                    <li>Thực hiện chương trình.</li>
+                </ol>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3.2. Biểu diễn Thuật toán</h3>
+                <p class="mb-4 leading-relaxed">Thuật toán có thể được biểu diễn bằng 3 cách chính:</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Ngôn ngữ tự nhiên.</li>
+                    <li>Lưu đồ - Sơ đồ khối.</li>
+                    <li>Mã giả.</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-3">3.2.1. Sử dụng Ngôn ngữ tự nhiên (Ví dụ: Giải $ax + b = 0$)</h4>
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <p class="mb-2"><strong>Đầu vào:</strong> $a, b$ thuộc $\mathbb{R}$.</p>
+                    <p class="mb-4"><strong>Đầu ra:</strong> nghiệm phương trình $ax + b = 0$.</p>
+                    <ol class="list-decimal list-outside pl-6 space-y-2 leading-relaxed">
+                        <li>Nhập 2 số thực $a$ và $b$.</li>
+                        <li>Nếu $a = 0$ thì:
+                            <ol class="list-decimal list-outside pl-6 mt-2 space-y-1">
+                                <li>Nếu $b = 0$ thì:
+                                    <ul class="list-disc list-outside pl-6 mt-1">
+                                        <li>PT vô số nghiệm.</li>
+                                        <li>Kết thúc thuật toán.</li>
+                                    </ul>
+                                </li>
+                                <li class="mt-1">Ngược lại (tức $b \neq 0$):
+                                    <ul class="list-disc list-outside pl-6 mt-1">
+                                        <li>PT vô nghiệm.</li>
+                                        <li>Kết thúc thuật toán.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </li>
+                        <li class="mt-2">Ngược lại (tức $a \neq 0$):
+                            <ol class="list-decimal list-outside pl-6 mt-2 space-y-1">
+                                <li>PT có nghiệm.</li>
+                                <li>Giá trị của nghiệm là $x = -b/a$.</li>
+                            </ol>
+                        </li>
+                    </ol>
+                </div>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-3">3.2.2. Sử dụng Lưu đồ - Sơ đồ khối</h4>
+                <p class="mb-4 leading-relaxed">Các khối cơ bản trong Lưu đồ:</p>
+                <!-- Bảng biểu -->
+                <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Khối</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Ý nghĩa</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Khối giới hạn</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Chỉ thị bắt đầu và kết thúc.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Khối vào ra</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Nhập/Xuất dữ liệu.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Khối lựa chọn</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Tùy điều kiện sẽ rẽ nhánh.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Khối thao tác</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Ghi thao tác cần thực hiện (ví dụ: Tính $x = -b/a$).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">Đường đi</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">Chỉ hướng thao tác tiếp theo.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Minh họa lưu đồ (dạng text) -->
+                <div class="mt-4 p-6 bg-yellow-50 border-l-4 border-yellow-400 rounded-lg">
+                    <p class="font-semibold text-yellow-800">Minh họa Lưu đồ (Giải $ax+b=0$):</p>
+                    <p class="mt-2 text-gray-700 italic leading-relaxed">(Bắt đầu) $\to$ (Nhập a,b) $\to$ (Lựa chọn $a=0?$)
+                        <br> $\to$ (Nếu Đúng) $\to$ (Lựa chọn $b=0?$)
+                        <br> $\quad \to$ (Nếu Đúng) $\to$ (Xuất “VSN”) $\to$ (Kết thúc)
+                        <br> $\quad \to$ (Nếu Sai) $\to$ (Xuất “VN”) $\to$ (Kết thúc)
+                        <br> $\to$ (Nếu Sai, $a \neq 0$) $\to$ (Tính $x = -b/a$) $\to$ (Xuất $x$) $\to$ (Kết thúc)
+                    </p>
+                </div>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-3">3.2.3. Sử dụng Mã giả (Pseudocode)</h4>
+                <p class="mb-4 leading-relaxed">Mã giả vay mượn ngôn ngữ nào đó (ví dụ Pascal) để biểu diễn thuật toán.</p>
+                <pre><code class="language-pseudocode">
+Đầu vào: a, b thuộc R.
+Đầu ra: nghiệm phương trình ax + b = 0.
+
+If a = 0 Then
+Begin
+    If b = 0 Then
+        Xuất “Phương trình vô số nghiệm”
+    Else
+        Xuất “Phương trình vô nghiệm”
+End
+Else
+    Xuất “Phương trình có nghiệm x = -b/a”
+                </code></pre>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3.3. Cài đặt thuật toán bằng C và C++ (Ví dụ)</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Cài đặt bằng C:</h4>
+                        <pre><code class="language-c">
+#include &lt;stdio.h&gt;
+#include &lt;conio.h&gt;
+
+void main()
+{
+    int a, b;
+    printf("Nhap a, b: ");
+    scanf("%d%d", &a, &b);
+    
+    if (a == 0)
+        if (b == 0)
+            printf("Phuong trinh VSN");
+        else
+            printf("Phuong trinh VN");
+    else
+        printf("x = %.2f", -float(b)/a);
+}
+                        </code></pre>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Cài đặt bằng C++:</h4>
+                        <pre><code class="language-cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+void main()
+{
+    int a, b;
+    cout&lt;&lt;"Nhap a, b: ";
+    cin&gt;&gt;a&gt;&gt;b;
+
+    if (a == 0)
+        if (b == 0)
+            cout&lt;&lt;"Phuong trinh VSN";
+        else
+            cout&lt;&lt;"Phuong trinh VN";
+    else
+        cout&lt;&lt;"x = "&lt;&lt;-float(b)/a);
+}
+                        </code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section4" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">4. GIỚI THIỆU TỔNG QUAN VỀ NGÔN NGỮ LẬP TRÌNH C/C++</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">4.1. Lịch sử Ngôn ngữ C/C++</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Ngôn ngữ C:</strong> Được phát triển bởi Dennis Ritchie tại Bell Telephone năm 1972. Tiền thân của C là ngôn ngữ B (tạo bởi Ken Thompson).</li>
+                    <li>C là ngôn ngữ lập trình có cấu trúc và phân biệt chữ Hoa - thường (case sensitive).</li>
+                    <li><strong>Ngôn ngữ C++:</strong> Là phần mở rộng của C. Phát triển bởi Bjarne Stroustrup (Bell Laboratories) vào đầu thập niên 1980.</li>
+                    <li>C++ cung cấp khả năng lập trình hướng đối tượng.</li>
+                    <li>C++ được gọi là Ngôn ngữ lai (Hybrid language).</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">4.2. Đặc điểm và Ưu điểm của C/C++</h3>
+                 <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>C thường được dùng để lập trình hệ thống.</li>
+                    <li>C được dùng như là một ngôn ngữ trung gian vì nó có thể xuất thành dạng tập tin object hay ngôn ngữ máy.</li>
+                    <li class="font-semibold">Ưu điểm:
+                        <ul class="list-circle list-outside pl-6 mt-2 space-y-1 font-normal">
+                            <li>Rất mạnh và linh động, có khả năng thể hiện bất cứ ý tưởng nào.</li>
+                            <li>Được sử dụng rộng rãi bởi các nhà lập trình chuyên nghiệp.</li>
+                            <li>Có tính khả chuyển (portable), ít thay đổi trên các hệ thống máy tính khác nhau.</li>
+                            <li>Rõ ràng, cô đọng.</li>
+                            <li>Lập trình đơn thể (modular), tái sử dụng thông qua hàm.</li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">4.3. Môi trường phát triển tích hợp (IDE)</h3>
+                <p class="mb-4 leading-relaxed">Môi trường phát triển tích hợp (Integrated Development Environment - IDE) bao gồm các thành phần:</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Biên tập chương trình nguồn (Trình EDIT).</li>
+                    <li>Biên dịch chương trình (Trình COMPILE).</li>
+                    <li>Chạy chương trình nguồn (RUNTIME).</li>
+                    <li>Sửa lỗi chương trình nguồn (DEBUG).</li>
+                </ul>
+                <p class="mb-4 leading-relaxed"><strong>Quá trình chuyển đổi tập tin:</strong> <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">.C/.CPP</code> $\to$ <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">.OBJ</code> $\to$ <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">.EXE</code>.</p>
+                <p class="mb-4 leading-relaxed"><strong>Một số môi trường lập trình thường dùng:</strong> Borland C++ 3.1, Microsoft Visual C++ 6.0, Microsoft Visual Studio 2010/2012 (Win32 Console Application).</p>
+            </section>
+
+            <section id="section5" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">5. BỘ TỪ VỰNG VÀ CẤU TRÚC CHƯƠG TRÌNH C++</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">5.1. Bộ từ vựng của C/C++</h3>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">5.1.1. Các ký tự được sử dụng</h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Bộ chữ cái 26 ký tự Latinh (A–Z, a–z).</li>
+                    <li>Bộ chữ số thập phân (0–9).</li>
+                    <li>Các ký hiệu toán học: + – * / = < > ( ).</li>
+                    <li>Các ký tự đặc biệt: . , : ; [ ] % \ # $ ‘.</li>
+                    <li>Ký tự gạch nối _ và khoảng trắng ‘.</li>
+                </ul>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">5.1.2. Từ khóa (Keyword)</h4>
+                <p class="mb-4 leading-relaxed">Là các từ dành riêng trong ngôn ngữ và không thể được sử dụng để đặt tên cho biến, hàm, tên chương trình con.</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h5 class="font-bold mb-2 text-gray-700">Thông dụng</h5>
+                        <code class="text-blue-600">const, enum, signed, struct, typedef, unsigned</code>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h5 class="font-bold mb-2 text-gray-700">Kiểu dữ liệu</h5>
+                        <code class="text-blue-600">char, double, float, int, long, short, void</code>
+                    </div>
+                     <div class="bg-gray-100 p-4 rounded-lg">
+                        <h5 class="font-bold mb-2 text-gray-700">Rẽ nhánh</h5>
+                        <code class="text-blue-600">case, default, else, if, switch</code>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h5 class="font-bold mb-2 text-gray-700">Vòng lặp</h5>
+                        <code class="text-blue-600">do, for, while</code>
+                    </div>
+                     <div class="bg-gray-100 p-4 rounded-lg">
+                        <h5 class="font-bold mb-2 text-gray-700">Lệnh nhảy</h5>
+                        <code class="text-blue-600">break, continue, goto, return</code>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">5.1.3. Tên/Định danh (Identifier)</h4>
+                <p class="mb-4 leading-relaxed">Là một dãy ký tự dùng để chỉ tên một hằng số, hằng ký tự, tên một biến, một kiểu dữ liệu, một hàm hay thủ tục.</p>
+                <p class="mb-3 font-semibold">Quy tắc đặt tên:</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Không được trùng với các từ khóa.</li>
+                    <li>Được tạo thành từ các chữ cái và các chữ số, nhưng bắt buộc chữ đầu phải là chữ cái hoặc <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">_</code>.</li>
+                    <li>Số ký tự tối đa trong một tên là 255 ký tự.</li>
+                    <li>Được dùng ký tự <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">_</code> chen trong tên nhưng không cho phép chen giữa các khoảng trắng.</li>
+                    <li>C++ phân biệt chữ hoa chữ thường (Ví dụ: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">A</code> khác <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">a</code>).</li>
+                </ul>
+                <p class="mb-2"><strong>Ví dụ tên hợp lệ:</strong> <code class="bg-green-100 text-green-700 px-2 py-1 rounded">GiaiPhuongTrinh</code>, <code class="bg-green-100 text-green-700 px-2 py-1 rounded">Bai_Tap1</code>.</p>
+                <p><strong>Ví dụ tên không hợp lệ:</strong> <code class="bg-red-100 text-red-700 px-2 py-1 rounded">1A</code> (bắt đầu bằng số), <code class="bg-red-100 text-red-700 px-2 py-1 rounded">Giai Phuong Trinh</code> (có khoảng trắng).</p>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">5.1.4. Dấu chấm phẩy (;) và Câu chú thích</h4>
+                 <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Dấu chấm phẩy (;):</strong> Dùng để phân cách các câu lệnh.</li>
+                    <li><strong>Câu chú thích (Comment):</strong> Đặt giữa <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">/* */</code> (nhiều dòng) hoặc <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">//</code> (một dòng). Trình biên dịch sẽ bỏ qua.</li>
+                 </ul>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">5.1.5. Hằng ký tự và hằng chuỗi</h4>
+                 <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Hằng ký tự:</strong> Đặt trong dấu nháy đơn. Ví dụ: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">'A'</code>, <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">'a'</code>.</li>
+                    <li><strong>Hằng chuỗi:</strong> Đặt trong dấu nháy kép. Ví dụ: <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">"Hello World!"</code>.</li>
+                 </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-3">5.2. Cấu trúc chương trình C++</h3>
+                <p class="mb-4 leading-relaxed">C++ được chia nhỏ thành những đơn vị gọi là hàm.</p>
+                <h4 class="text-lg font-semibold text-gray-700 mb-2">Cấu trúc cơ bản:</h4>
+                <pre><code class="language-cpp">
+#include “…”; // Khai báo file tiêu đề
+using namespace std;
+
+int x; // Khai báo biến
+void Nhap(); // Khai báo hàm
+
+void main() // Hàm chính
+{
+    // Các lệnh và thủ tục
+}
+                </code></pre>
+                <p class="mb-3 font-semibold mt-4">Giải thích các thành phần chính:</p>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Hàm main():</strong> Phải có ít nhất một hàm <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">main()</code>. Hệ điều hành luôn trao quyền điều khiển cho hàm <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">main()</code> khi chương trình thực thi.</li>
+                    <li><strong>Dấu phân cách {...}:</strong> Dấu <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">{</code> bắt đầu và <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">}</code> kết thúc một hàm (khối lệnh).</li>
+                    <li>Trình biên dịch C++ chỉ nhận diện câu lệnh dựa trên dấu chấm phẩy <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">;</code>.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-3">5.3. Ví dụ minh họa cấu trúc chương trình C++</h3>
+                <h4 class="text-lg font-semibold text-gray-700 mb-2">Chương trình tính tổng hai số nguyên:</h4>
+                <pre><code class="language-cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+void main()
+{
+    int x, y, tong;
+    cout&lt;&lt;"Nhap hai so nguyen: ";
+    cin&gt;&gt;x&gt;&gt;y;
+    
+    tong = x + y;
+    
+    cout&lt;&lt;"Tong hai so = ";
+    cout&lt;&lt;tong;
+}
+                </code></pre>
+            </section>
+
+            <section id="section6" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">6. BÀI TẬP VÀ ỨNG DỤNG THUẬT TOÁN</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">6.1. Bài tập Lý thuyết</h3>
+                <ol class="list-decimal list-outside pl-6 space-y-3 mb-4 leading-relaxed">
+                    <li>Thuật toán là gì? Trình bày các tính chất quan trọng của một thuật toán.</li>
+                    <li>Các bước xây dựng chương trình.</li>
+                    <li>Các cách biểu diễn thuật toán? Ưu và khuyết điểm của từng phương pháp? Cho ví dụ minh họa.</li>
+                </ol>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">6.2. Bài tập Thực hành: Công thức và Thuật toán</h3>
+                
+                <!-- Bài 6 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài 6: Tính Tiền và Thuế GTGT</h4>
+                    <p class="mb-2"><strong>Đầu vào:</strong> Tên sản phẩm, Số lượng, Đơn giá.</p>
+                    <p class="mb-2"><strong>Công thức:</strong></p>
+                    <ul class="list-disc list-outside pl-6 mb-2">
+                        <li>Tiền = Số lượng * Đơn giá.</li>
+                        <li>Thuế giá trị gia tăng (VAT) = $10\%$ Tiền.</li>
+                    </ul>
+                    <p><strong>Lưu đồ:</strong> (Nhập) $\to$ (Tính Tiền, VAT) $\to$ (Xuất Tiền, VAT) $\to$ (Kết thúc).</p>
+                </div>
+
+                <!-- Bài 7 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài 7: Tính Điểm Trung Bình (ĐTB)</h4>
+                    <p class="mb-2"><strong>Đầu vào:</strong> Điểm thi (T, L, H) và Hệ số (HsT, HsL, HsH).</p>
+                    <p class="mb-2"><strong>Công thức:</strong></p>
+                    <div class="text-center my-4 p-4 bg-white rounded shadow-inner overflow-x-auto">
+                        $$ \text{ĐTB} = \frac{(\text{T} \times \text{HsT}) + (\text{L} \times \text{HsL}) + (\text{H} \times \text{HsH})}{\text{HsT} + \text{HsL} + \text{HsH}} $$
+                    </div>
+                    <p><strong>Lưu đồ:</strong> (Nhập) $\to$ (Tính ĐTB) $\to$ (Xuất ĐTB) $\to$ (Kết thúc).</p>
+                </div>
+
+                <!-- Bài 8 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài 8: Tính Chu vi và Diện tích Hình tròn</h4>
+                    <p class="mb-2"><strong>Đầu vào:</strong> Bán kính $R$.</p>
+                    <p class="mb-2"><strong>Hằng số:</strong> $\text{PI} = 3.1415$.</p>
+                    <p class="mb-2"><strong>Công thức:</strong></p>
+                    <ul class="list-disc list-outside pl-6 mb-2">
+                        <li>Chu vi = $2 \times \text{PI} \times R$.</li>
+                        <li>Diện tích = $\text{PI} \times R \times R$.</li>
+                    </ul>
+                    <p><strong>Lưu đồ:</strong> (Nhập $R$) $\to$ (Tính Chu vi, Diện tích) $\to$ (Xuất) $\to$ (Kết thúc).</p>
+                </div>
+
+                <!-- Bài 9 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài 9: Tính Số nút xe</h4>
+                    <p class="mb-2"><strong>Đầu vào:</strong> Số xe $N$ (gồm 4 chữ số).</p>
+                    <p class="mb-2"><strong>Thuật toán (Các bước tính):</strong></p>
+                    <ol class="list-decimal list-outside pl-6 mb-2 space-y-1 font-mono text-sm">
+                        <li>Số thứ 4: $n4 = N \pmod{10}$, $N = N / 10$.</li>
+                        <li>Số thứ 3: $n3 = N \pmod{10}$, $N = N / 10$.</li>
+                        <li>Số thứ 2: $n2 = N \pmod{10}$, $N = N / 10$.</li>
+                        <li>Số thứ 1: $n1 = N$.</li>
+                        <li>Số nút $S = (n1 + n2 + n3 + n4) \pmod{10}$.</li>
+                    </ol>
+                    <p><strong>Lưu đồ:</strong> (Nhập $N$) $\to$ (Tính $n4, n3, n2, n1, S$) $\to$ (Xuất $S$) $\to$ (Kết thúc).</p>
+                </div>
+
+                <!-- Bài 10 -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài 10: Tính Min và Max của hai số nguyên $a, b$</h4>
+                    <p class="mb-2"><strong>Đầu vào:</strong> Đọc $a, b$.</p>
+                    <p><strong>Lưu đồ:</strong> (Bắt đầu) $\to$ (Đọc $a, b$) $\to$ (Lựa chọn $a > b$)
+                        <br> $\to$ (Nếu $Đ$): (Xuất $a$ max, $b$ min) $\to$ (Kết thúc).
+                        <br> $\to$ (Nếu $S$): (Xuất $a$ min, $b$ max) $\to$ (Kết thúc).
+                    </p>
+                </div>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-3">6.3. Bài tập Mở rộng</h3>
+                <ol class="list-decimal list-outside pl-6 space-y-3 mb-4 leading-relaxed">
+                    <li>Nhập số nguyên $n$, kiểm tra xem $n$ có phải là số chính phương hay không?</li>
+                    <li>Nhập số nguyên $n$, kiểm tra xem $n$ có phải là số nguyên tố hay không?</li>
+                    <li>Nhập vào 3 hệ số $a, b, c$ của phương trình bậc 2 ($ax^2 + bx + c = 0$), cho biết nghiệm của phương trình trên.</li>
+                    <li>Viết chương trình nhập vào một số nguyên dương $N$. Tính và in ra tổng các số nguyên từ 1 đến $N$.</li>
+                </ol>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-8 bg-gray-800 text-gray-400 mt-12">
+        <p>&copy; 2025 | Tài liệu học tập môn Nhập môn Lập trình.</p>
+    </footer>
+
+    <!-- Prism.js cho syntax highlighting -->
+    <!-- 1. Tải Core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" xintegrity="sha512-9khQRAUBYEJDCDVP2owVf/ciEwclIZUPutG8GCEOPV8KAeS41s9TfAudWMAWAzspHHLRaOevrU8fE7s9DCBOOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 2. Tải Autoloader để tự động nhận diện ngôn ngữ (C, C++, Pseudocode) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" xintegrity="sha512-SkmBfuA2hqjzEVpbaK+wTBpHeqM2mN/0A5EgTMZPKPLyN+3oR9jBEOKzT6K0LA/OBOuKJv9unNLJcfhE+K9rCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+</html>

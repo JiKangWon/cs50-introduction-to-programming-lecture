@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài giảng: Các Cấu trúc Lặp C++</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tải MathJax để hiển thị công thức LaTeX -->
+    <!-- 1. Cấu hình MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- 2. Tải script MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS cho Prism.js (Syntax Highlighting - Theme Okaidia) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" xintegrity="sha512-mIs9kKbaw6JrqdefaultImIKwD6rdMMjgNsJqdPLUEVBOxtSRhQjhpLSRYMbBOEaMbM8dcGchjlowkVYdPaODeWYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f6; /* Màu nền xám xanh nhẹ */
+        }
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a5b4fc; /* Màu tím nhạt của indigo-300 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #818cf8; /* Màu tím của indigo-400 */
+        }
+        
+        /* Style cho mục lục */
+        .toc-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+        .toc-link:hover {
+            background-color: #ecfdf5; /* Nền xanh lá cây rất nhạt (emerald-50) */
+            color: #047857; /* Chữ xanh lá cây (emerald-700) */
+            border-left-color: #059669; /* Viền xanh lá cây (emerald-600) */
+            transform: translateX(4px);
+        }
+
+        /* Tùy chỉnh style cho bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #fdfdfe;
+        }
+        /* Style cho bảng so sánh break/continue */
+        .table-comparison th {
+            width: 50%;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header của bài giảng -->
+    <header class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-6 py-10">
+            <h1 class="text-4xl font-bold mb-2">BÀI GIẢNG: CÁC CẤU TRÚC LẶP</h1>
+            <h2 class="text-2xl font-semibold opacity-90">Môn học: Nhập Môn Lập Trình (C & C++)</h2>
+            <div class="mt-6 border-t border-emerald-400 opacity-80 pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm">
+                <p class="font-medium">Giảng viên: Nguyễn Chí Cường</p>
+                <p class="font-medium mt-1 sm:mt-0">Ngôn ngữ: C & C++</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Thân trang: Mục lục (trái) và Nội dung (phải) -->
+    <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-12">
+
+        <!-- Cột Mục lục (Sidebar) -->
+        <aside class="md:col-span-1 md:sticky md:top-8 self-start">
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold text-emerald-700 mb-5 border-b-2 border-emerald-200 pb-3">Nội Dung Chính</h3>
+                <nav>
+                    <ul class="space-y-2">
+                        <li><a href="#section1" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">I. Đặt Vấn đề</a></li>
+                        <li><a href="#section2" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">II. Câu lệnh FOR</a></li>
+                        <li><a href="#section3" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">III. Câu lệnh WHILE</a></li>
+                        <li><a href="#section4" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">IV. Câu lệnh DO...WHILE</a></li>
+                        <li><a href="#section5" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">V. So sánh các vòng lặp</a></li>
+                        <li><a href="#section6" class="block py-2 px-4 rounded-md text-gray-700 font-medium toc-link">VI. Bài tập & Thuật toán</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Cột Nội dung chính -->
+        <main class="md:col-span-3">
+
+            <!-- PHẦN 1: ĐẶT VẤN ĐỀ -->
+            <section id="section1" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">I. ĐẶT VẤN ĐỀ VÀ GIẢI PHÁP</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">Vấn đề:</h3>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Nếu viết chương trình xuất các số từ 1 đến 10, ta cần 10 câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">printf</code>.</li>
+                    <li>Nếu viết chương trình xuất các số từ 1 đến 1000, ta cần 1000 câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">printf</code>.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Giải pháp:</h3>
+                <p class="mb-4 leading-relaxed">Sử dụng <strong>cấu trúc lặp</strong> để lặp lại một hành động trong khi còn thỏa một điều kiện nào đó.</p>
+            </section>
+
+            <!-- PHẦN 2: CÂU LỆNH FOR -->
+            <section id="section2" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">II. CÂU LỆNH FOR</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">1. Cú pháp và Lưu đồ khối</h3>
+                <p class="mb-4 leading-relaxed">Cú pháp tổng quát của câu lệnh <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">for</code> là:</p>
+                <div class="text-center my-4 p-4 bg-gray-100 rounded shadow-inner overflow-x-auto">
+                    $$\text{for } (\langle \text{Khởi đầu} \rangle; \langle \text{Đ/K lặp} \rangle; \langle \text{Bước nhảy} \rangle)$$
+                    $$\langle \text{Lệnh} \rangle;$$
+                </div>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>$\langle \text{Khởi đầu} \rangle, \langle \text{Đ/K lặp} \rangle, \langle \text{Bước nhảy} \rangle$: là các biểu thức C bất kỳ có chức năng riêng.</li>
+                    <li>$\langle \text{Lệnh} \rangle$: là lệnh đơn hoặc khối lệnh <code class="bg-gray-200 px-2 py-1 rounded">{ ... }</code>.</li>
+                </ul>
+                <p class="font-semibold mb-2">Nguyên tắc hoạt động:</p>
+                <ol class="list-decimal list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Thực hiện $\langle \text{Khởi đầu} \rangle$ (chỉ 1 lần duy nhất).</li>
+                    <li>Kiểm tra $\langle \text{Đ/K lặp} \rangle$.</li>
+                    <li>Nếu điều kiện lặp Đúng ($\text{Đ}$):
+                        <ul class="list-disc list-outside pl-6 mt-2 space-y-1">
+                            <li>Thực hiện $\langle \text{Lệnh} \rangle$.</li>
+                            <li>Thực hiện $\langle \text{Bước nhảy} \rangle$.</li>
+                            <li>Quay lại bước 2.</li>
+                        </ul>
+                    </li>
+                    <li class="mt-2">Nếu điều kiện lặp Sai ($\text{S}$): Thoát khỏi vòng lặp.</li>
+                </ol>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2. Ví dụ minh họa</h3>
+                <pre><code class="language-cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+void main()
+{
+    int i;
+    // Bước nhảy: i++
+    for (i = 0; i < 10; i++)
+        cout << i << "\n"; 
+
+    // Bước nhảy: j = j + 1
+    for (int j = 0; j < 10; j = j + 1)
+        cout << j << endl; 
+
+    // Bước nhảy: k += 2, sử dụng khối lệnh
+    for (int k = 0; k < 10; k += 2)
+    {
+        cout << k;
+        cout << "\n";
+    } 
+}
+                </code></pre>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3. Một số lưu ý quan trọng về câu lệnh for</h3>
+                
+                <h4 class="text-xl font-semibold text-gray-700 mt-4 mb-2">A. Khả năng lồng nhau</h4>
+                <p class="mb-4 leading-relaxed">Câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">for</code> là một câu lệnh đơn và có thể lồng nhau.</p>
+                <pre><code class="language-cpp">
+if (n < 10 && m < 20)
+{
+    for (int i = 0; i < n; i++)
+    {
+        // Vòng lặp for lồng bên trong
+        for (int j = 0; j < m; j++) 
+        {
+            cout << (i + j);
+            cout << "\n";
+        }
+    }
+}
+                </code></pre>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">B. Khả năng bỏ qua các thành phần</h4>
+                <p class="mb-4 leading-relaxed">Trong câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">for</code>, có thể sẽ không có phần $\langle \text{Khởi đầu} \rangle$, $\langle \text{Bước nhảy} \rangle$, hoặc $\langle \text{Đ/K lặp} \rangle$.</p>
+                <p class="mb-2 font-medium">Không có $\langle \text{Khởi đầu} \rangle$: (Phải khởi tạo biến trước đó)</p>
+                <pre><code class="language-cpp">
+int i = 0;
+for (; i < 10; i++)
+    cout << i << endl;
+                </code></pre>
+                <p class="mt-4 mb-2 font-medium">Không có $\langle \text{Bước nhảy} \rangle$: (Phải thực hiện tăng/giảm biến bên trong $\langle \text{Lệnh} \rangle$)</p>
+                <pre><code class="language-cpp">
+int i;
+for (i = 0; i < 10; )
+{
+    cout << i << "\n";
+    i++; // Thực hiện bước nhảy trong thân lệnh
+}
+                </code></pre>
+                <p class="mt-4 mb-2 font-medium">Không có $\langle \text{Đ/K lặp} \rangle$: (Vòng lặp vô tận, cần <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">break</code> để thoát)</p>
+                <pre><code class="language-cpp">
+int i;
+for (i = 0; ; i++)
+{
+    if (i >= 10)
+        break; // Thoát khi đạt điều kiện
+    cout << i << endl;
+}
+                </code></pre>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">C. Lệnh break và continue</h4>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Lệnh <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">break</code> làm kết thúc câu lệnh (thoát khỏi vòng lặp ngay lập tức).</li>
+                    <li>Lệnh <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">continue</code> bỏ qua phần còn lại của lần lặp hiện tại và chuyển sang lần lặp tiếp theo.</li>
+                </ul>
+                <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                    <table class="table-comparison">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th>Ví dụ Lệnh <code class="text-red-600">break</code></th>
+                                <th>Ví dụ Lệnh <code class="text-red-600">continue</code></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <pre><code class="language-cpp">
+for (i = 0; i < 10; i++) {
+    if (i % 2 == 0)
+        break; 
+    // Thoát ngay khi i chẵn
+    // (i=0) $\to$ break
+    cout << i << endl;
+}
+// Kết quả: Không in gì cả.
+                                    </code></pre>
+                                </td>
+                                <td>
+                                    <pre><code class="language-cpp">
+for (i = 0; i < 10; i++) {
+    if (i % 2 == 0)
+        continue; 
+    // Bỏ qua nếu i chẵn
+    cout << i << endl; 
+}
+// Kết quả: In ra số lẻ
+// 1, 3, 5, 7, 9
+                                    </code></pre>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="text-xl font-semibold text-gray-700 mt-6 mb-2">D. Quy tắc về dấu chấm phẩy và dấu phẩy</h4>
+                <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg mb-4">
+                    <p class="font-semibold text-red-700">Lỗi nghiêm trọng: Không được thêm <code class="bg-gray-200 px-2 py-1 rounded">;</code> ngay sau lệnh <code class="bg-gray-200 px-2 py-1 rounded">for</code>.</p>
+                    <p class="text-red-600">Điều này tương đương với một câu lệnh rỗng, dẫn đến vòng lặp chỉ thực hiện lệnh rỗng đó.</p>
+                </div>
+                <pre><code class="language-cpp">
+// VÍ DỤ SAI:
+for (i = 0; i < 10; i++); // Lệnh rỗng được lặp 10 lần
+{
+    // Khối lệnh này chạy 1 lần sau khi vòng lặp kết thúc (i=10)
+    cout << i; // In ra số 10
+    cout << "\n";
+}
+                </code></pre>
+                <p class="mt-4 mb-2 leading-relaxed">Các thành phần $\langle \text{Khởi đầu} \rangle, \langle \text{Đ/K lặp} \rangle, \langle \text{Bước nhảy} \rangle$ cách nhau bằng dấu <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">;</code>.</p>
+                <p class="mb-4 leading-relaxed">Nếu có nhiều thành phần trong mỗi phần (ví dụ: khởi tạo nhiều biến), chúng được cách nhau bằng dấu <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">,</code>.</p>
+                <pre><code class="language-cpp">
+for (int i = 1, j = 2; // Khởi tạo nhiều biến
+     i + j < 10;
+     i++, j += 2) // Bước nhảy nhiều thành phần
+{
+    cout << (i + j) << endl;
+}
+                </code></pre>
+            </section>
+            
+            <!-- PHẦN 3: CÂU LỆNH WHILE -->
+            <section id="section3" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">III. CÂU LỆNH WHILE</h2>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">1. Cú pháp và Lưu đồ khối</h3>
+                <p class="mb-4 leading-relaxed">Cú pháp tổng quát của câu lệnh <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">while</code> là:</p>
+                <div class="text-center my-4 p-4 bg-gray-100 rounded shadow-inner overflow-x-auto">
+                    $$\text{while } (\langle \text{Đ/K lặp} \rangle)$$
+                    $$\langle \text{Lệnh} \rangle;$$
+                </div>
+                 <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>$\langle \text{Lệnh} \rangle$: Câu lệnh đơn hoặc Câu lệnh phức <code class="bg-gray-200 px-2 py-1 rounded">{ ... }</code>.</li>
+                    <li>$\langle \text{Đ/K lặp} \rangle$: Biểu thức C bất kỳ, thường là biểu thức quan hệ cho kết quả $\mathbf{0 \text{ (sai)}}$ và $\mathbf{\ne 0 \text{ (đúng)}}$.</li>
+                </ul>
+                <p class="font-semibold mb-2">Nguyên tắc hoạt động:</p>
+                <ol class="list-decimal list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>Kiểm tra $\langle \text{Đ/K lặp} \rangle$.</li>
+                    <li>Nếu điều kiện lặp Đúng ($\text{Đ}$): Thực hiện $\langle \text{Lệnh} \rangle$, sau đó quay lại bước 1.</li>
+                    <li>Nếu điều kiện lặp Sai ($\text{S}$): Thoát khỏi vòng lặp.</li>
+                </ol>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2. Ví dụ minh họa</h3>
+                <pre><code class="language-cpp">
+int i = 0;
+while (i < 10)
+{
+    cout << i << endl;
+    i++; // Phải có bước nhảy trong thân lệnh
+}
+                </code></pre>
+                <p class="mt-4 mb-4 leading-relaxed">Lưu ý rằng câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">while</code> có thể được viết lại tương đương với câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">for</code> thiếu $\langle \text{Khởi đầu} \rangle$ và $\langle \text{Bước nhảy} \rangle$:</p>
+                <pre><code class="language-cpp">
+int i = 0;
+for (; i < 10; )
+{
+    cout << i << endl;
+    i++;
+}
+                </code></pre>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3. Một số lưu ý quan trọng về câu lệnh while</h3>
+                <ul class="list-disc list-outside pl-6 space-y-3 mb-4 leading-relaxed">
+                    <li><strong>Lồng nhau:</strong> Câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">while</code> là một câu lệnh đơn và có thể lồng nhau.</li>
+                    <li><strong>Khả năng không thực hiện:</strong> Câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">while</code> có thể không thực hiện lần nào do điều kiện lặp ngay từ lần đầu đã không thỏa.
+                        <pre><code class="language-cpp">
+int n = 1;
+while (n > 10) // 1 > 10 là Sai ngay từ đầu
+{
+    cout << n << endl;
+    n--;
+} 
+// Khối lệnh này không bao giờ chạy
+                        </code></pre>
+                    </li>
+                    <li class="font-semibold text-red-700"><strong>Dấu chấm phẩy (;):</strong> Không được thêm <code class="bg-gray-200 px-2 py-1 rounded">;</code> ngay sau lệnh <code class="bg-gray-200 px-2 py-1 rounded">while</code>. Nếu thêm, nó sẽ tạo thành vòng lặp vô tận (chỉ thực hiện lệnh rỗng) nếu điều kiện thỏa.</li>
+                    <li><strong>Lặp vô tận (Loop):</strong> Câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">while</code> có thể bị lặp vô tận nếu điều kiện lặp luôn đúng.
+                        <pre><code class="language-cpp">
+// VÍ DỤ LẶP VÔ TẬN:
+int n = 1;
+while (n < 10)
+{
+    cout << n;
+    n--; // n giảm, điều kiện n < 10 luôn đúng
+}
+                        </code></pre>
+                    </li>
+                </ul>
+            </section>
+            
+            <!-- PHẦN 4: CÂU LỆNH DO...WHILE -->
+            <section id="section4" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">IV. CÂU LỆNH DO… WHILE</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">1. Cú pháp và Lưu đồ khối</h3>
+                <p class="mb-4 leading-relaxed">Cú pháp tổng quát của câu lệnh <code class="bg-gray-200 text-red-600 px-2 py-1 rounded">do… while</code> là:</p>
+                <div class="text-center my-4 p-4 bg-gray-100 rounded shadow-inner overflow-x-auto">
+                    $$\text{do}$$
+                    $$\langle \text{Lệnh} \rangle;$$
+                    $$\text{while } (\langle \text{Đ/K lặp} \rangle);$$
+                </div>
+                <ul class="list-disc list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li>$\langle \text{Lệnh} \rangle$: Câu lệnh đơn hoặc Câu lệnh phức.</li>
+                    <li>$\langle \text{Đ/K lặp} \rangle$: Biểu thức C bất kỳ.</li>
+                </ul>
+                <p class="font-semibold mb-2">Nguyên tắc hoạt động:</p>
+                <ol class="list-decimal list-outside pl-6 space-y-2 mb-4 leading-relaxed">
+                    <li><strong>Thực hiện $\langle \text{Lệnh} \rangle$ (ít nhất 1 lần).</strong></li>
+                    <li>Kiểm tra $\langle \text{Đ/K lặp} \rangle$.</li>
+                    <li>Nếu điều kiện lặp Đúng ($\text{Đ}$): Quay lại bước 1.</li>
+                    <li>Nếu điều kiện lặp Sai ($\text{S}$): Thoát khỏi vòng lặp.</li>
+                </ol>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2. Ví dụ minh họa</h3>
+                <pre><code class="language-cpp">
+int i = 0;
+do
+{
+    cout << i << endl;
+    i++;
+}
+while (i < 10);
+                </code></pre>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">3. Một số lưu ý quan trọng về câu lệnh do… while</h3>
+                 <ul class="list-disc list-outside pl-6 space-y-3 mb-4 leading-relaxed">
+                    <li><strong>Lồng nhau:</strong> Câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">do… while</code> là một câu lệnh đơn và có thể lồng nhau.</li>
+                    <li><strong>Thực hiện ít nhất 1 lần:</strong> Câu lệnh <code class="bg-gray-200 px-2 py-1 rounded">do… while</code> sẽ được thực hiện ít nhất 1 lần do điều kiện lặp được kiểm tra ở cuối.</li>
+                    <li class="font-semibold">Ứng dụng: Thường dùng để yêu cầu nhập liệu đến khi thỏa điều kiện.
+                        <pre><code class="language-cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+void main()
+{
+    int n;
+    do // Chắc chắn chạy lần đầu để nhập n
+    {
+        cout << "Nhap n (1-100): ";
+        cin >> n;
+    }
+    while (n < 1 || n > 100); // Lặp nếu n không hợp lệ
+    
+    // Khi thoát khỏi vòng lặp, n chắc chắn hợp lệ
+}
+                        </code></pre>
+                    </li>
+                    <li><strong>Lặp vô tận (Loop):</strong> Tương tự <code class="bg-gray-200 px-2 py-1 rounded">while</code>, <code class="bg-gray-200 px-2 py-1 rounded">do… while</code> cũng có thể bị lặp vô tận nếu điều kiện lặp luôn thỏa mãn.</li>
+                 </ul>
+            </section>
+            
+            <!-- PHẦN 5: SO SÁNH -->
+            <section id="section5" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">V. SO SÁNH FOR, WHILE, VÀ DO… WHILE</h2>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mb-3">1. Điểm tương đồng</h3>
+                <p class="mb-4 leading-relaxed">Cả ba cấu trúc đều có khả năng lặp lại nhiều hành động và có thể chuyển đổi tương đương cho nhau.</p>
+                
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">2. Điểm khác biệt về điều kiện và số lần lặp</h3>
+                <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                    <table>
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th>Đặc điểm</th>
+                                <th>for</th>
+                                <th>while</th>
+                                <th>do… while</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold">Số lần lặp</td>
+                                <td>Thường được xác định rõ (ví dụ: lặp $n$ lần). Có thể không chạy lần nào.</td>
+                                <td>Có thể không thực hiện lần nào.</td>
+                                <td class="font-semibold text-emerald-700">Sẽ được thực hiện ít nhất 1 lần.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Kiểm tra điều kiện</td>
+                                <td>Kiểm tra ở <strong>đầu</strong> vòng lặp.</td>
+                                <td>Kiểm tra ở <strong>đầu</strong> vòng lặp.</td>
+                                <td>Kiểm tra ở <strong>cuối</strong> vòng lặp.</td>
+                            </tr>
+                             <tr>
+                                <td class="font-semibold">Thường dùng cho</td>
+                                <td>Vòng lặp đếm, biết trước số lần lặp.</td>
+                                <td>Vòng lặp chưa biết trước số lần, lặp khi điều kiện còn đúng.</td>
+                                <td>Vòng lặp cần chạy ít nhất 1 lần (ví dụ: nhập liệu, menu).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- PHẦN 6: BÀI TẬP -->
+            <section id="section6" class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 border-b-2 border-emerald-100 pb-3">VI. BÀI TẬP VẬN DỤNG VÀ THUẬT TOÁN</h2>
+                <p class="mb-6 leading-relaxed">Đây là các bài tập tiêu biểu sử dụng cấu trúc lặp, cùng với các thuật toán mẫu:</p>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Bài tập 1: Phân tích số nguyên dương $n$</h3>
+
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">1a. Kiểm tra Số đối xứng (Ví dụ: 121)</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Đảo ngược số $n$ gốc (lưu vào <code class="bg-gray-200 px-2 py-1 rounded">sodao</code>) và so sánh với $n$.</p>
+                    <pre><code class="language-cpp">
+int n, sogoc, sodao, donvi;
+// ... (Nhập n)
+sogoc = n; 
+sodao = 0;
+while (sogoc > 0)
+{
+    donvi = sogoc % 10;
+    sodao = sodao * 10 + donvi;
+    sogoc = sogoc / 10;
+}
+
+if (sodao == n)
+    cout << "Day la so doi xung";
+else
+    cout << "Day khong la so doi xung";
+                    </code></pre>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">1b. Kiểm tra Số chính phương (Ví dụ: 4, 9)</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Dùng hàm <code class="bg-gray-200 px-2 py-1 rounded">sqrt</code> để tìm căn bậc hai, sau đó kiểm tra xem bình phương của phần nguyên có bằng số gốc không.</p>
+                    <pre><code class="language-cpp">
+#include &lt;math.h&gt;
+// ...
+int n;
+// ... (Nhập n)
+int n_can_nguyen = (int)sqrt(n); // Lấy phần nguyên của căn bậc 2
+
+if (n_can_nguyen * n_can_nguyen == n)
+    cout << n << " la so chinh phuong";
+else
+    cout << n << " khong la so chinh phuong";
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">1c. Kiểm tra Số nguyên tố (Ví dụ: 2, 3, 5, 7)</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Đếm số ước của $n$ (từ 1 đến $n$). Nếu số ước (souoc) == 2 thì $n$ là số nguyên tố.</p>
+                    <pre><code class="language-cpp">
+int n, souoc, i;
+// ... (Nhập n)
+souoc = 0;
+for (i = 1; i <= n; i++)
+{
+    if (n % i == 0)
+        souoc++;
+}
+
+if (souoc == 2)
+    cout << n << " la so nguyen to";
+else
+    cout << n << " khong la so nguyen to";
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">1d. Tìm chữ số lớn nhất và nhỏ nhất</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Dùng vòng <code class="bg-gray-200 px-2 py-1 rounded">while</code> để tách từng chữ số (donvi) và so sánh để cập nhật <code class="bg-gray-200 px-2 py-1 rounded">min</code>, <code class="bg-gray-200 px-2 py-1 rounded">max</code>.</p>
+                    <pre><code class="language-cpp">
+int n, donvi, min, max;
+// ... (Nhập n)
+
+min = n % 10; // Khởi tạo min/max bằng chữ số cuối
+max = min;
+n = n / 10;
+
+while (n > 0)
+{
+    donvi = n % 10;
+    n = n / 10;
+    if (donvi < min) min = donvi;
+    if (donvi > max) max = donvi;
+}
+cout << "So NN = " << min << ", So LN = " << max;
+                    </code></pre>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">1e. Các chữ số có tăng dần hay giảm dần không</h4>
+                    <p class="mb-2"><strong>Thuật toán (Kiểm tra tăng dần từ phải sang trái):</strong> Dùng <code class="bg-gray-200 px-2 py-1 rounded">do...while</code> để so sánh chữ số sau (sosau) và chữ số trước đó (sotruoc).</p>
+                    <pre><code class="language-cpp">
+int n, sotruoc, sosau;
+// ... (Nhập n)
+sotruoc = n % 10;
+bool tangDan = true;
+
+do
+{
+    sosau = sotruoc;
+    n = n / 10;
+    if (n == 0) break; // Đã hết số
+    sotruoc = n % 10;
+    
+    if (sotruoc >= sosau) { // Nếu số đằng trước lớn hơn hoặc bằng
+        tangDan = false;
+        break;
+    }
+} while (n != 0);
+
+if (tangDan)
+    cout << "Cac chu so tang dan (tu phai sang trai)";
+else
+    cout << "Cac chu so khong tang dan";
+                    </code></pre>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-3">Bài tập 2: Tính tổng/tích</h3>
+                <p class="mb-4 leading-relaxed">Các bài tập này đều sử dụng vòng lặp <code class="bg-gray-200 px-2 py-1 rounded">for (i = 1; i <= n; i++)</code> để tính tổng $S$.</p>
+                <div class="overflow-x-auto rounded-lg border shadow-md mb-6">
+                    <table>
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th>Bài toán</th>
+                                <th>Công thức tính S</th>
+                                <th>Code/Lệnh lặp chính</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2a. $S = 1 + 2 + … + n$</td>
+                                <td>$S = S + i$</td>
+                                <td class="font-mono">s = s + i;</td>
+                            </tr>
+                            <tr>
+                                <td>2b. $S = 1^2 + 2^2 + … + n^2$</td>
+                                <td>$S = S + i^2$</td>
+                                <td class="font-mono">s = s + i*i;</td>
+                            </tr>
+                            <tr>
+                                <td>2c. $S = 1 + 1/2 + … + 1/n$</td>
+                                <td>$S = S + 1/i$ (float)</td>
+                                <td class="font-mono">float s = 0; s = s + 1.0/i;</td>
+                            </tr>
+                            <tr>
+                                <td>2d. $S = 1 \times 2 \times … \times n = n!$</td>
+                                <td>$S = S \times i$</td>
+                                <td class="font-mono">long s = 1; s = s * i;</td>
+                            </tr>
+                            <tr>
+                                <td>2e. $S = 1! + 2! + … + n!$</td>
+                                <td>Dùng lặp lồng nhau</td>
+                                <td class="font-mono">long s = 0, igt = 1; <br> for(i=1; i<=n; i++) {<br> &nbsp; igt = igt * i; <br> &nbsp; s = s + igt;<br> }</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 3: Tổng các số nhỏ hơn $n$ chia hết cho $a$ nhưng không $b$</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Dùng <code class="bg-gray-200 px-2 py-1 rounded">for</code> để duyệt $i$ từ $1$ đến $n-1$, kiểm tra đồng thời hai điều kiện.</p>
+                    <pre><code class="language-cpp">
+int n, a, b, s, i;
+// ... (Nhập n, a, b)
+s = 0;
+for (i = 1; i < n; i++) // i <= n-1
+{
+    if (i % a == 0 && i % b != 0) // Điều kiện thoả mãn
+        s = s + i;
+}
+cout << "Tong cac so thoa yeu cau la: " << s;
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 5: Xuất ra số ngược lại (Ví dụ: 1706 $\to$ 6071)</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Dùng <code class="bg-gray-200 px-2 py-1 rounded">while</code> để liên tục lấy chữ số cuối cùng (donvi) và xuất ra.</p>
+                    <pre><code class="language-cpp">
+int n, donvi;
+// ... (Nhập n)
+while (n > 0)
+{
+    donvi = n % 10;
+    n = n / 10;
+    cout << donvi; // Xuất trực tiếp chữ số
+}
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 6: Tìm số hai chữ số thỏa mãn Tích = 2 * Tổng</h4>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Dùng <code class="bg-gray-200 px-2 py-1 rounded">for</code> duyệt từ 10 đến 99, tách số và kiểm tra điều kiện.</p>
+                    <pre><code class="language-cpp">
+int i, donvi, chuc;
+for (i = 10; i <= 99; i++)
+{
+    donvi = i % 10;
+    chuc = i / 10;
+    if ( (chuc * donvi) == (2 * (chuc + donvi)) ) // Công thức kiểm tra
+        cout << i << " ";
+}
+// Kết quả: 36
+                    </code></pre>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 7: Tìm ước số chung lớn nhất (USCLN) của $a$ và $b$</h4>
+                    <h5 class="font-semibold text-gray-700 mt-4 mb-2">Cách 1: Dò từ số nhỏ nhất</h5>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Khởi tạo <code class="bg-gray-200 px-2 py-1 rounded">uscln</code> bằng $\min(a, b)$. Dùng <code class="bg-gray-200 px-2 py-1 rounded">while</code> lùi dần <code class="bg-gray-200 px-2 py-1 rounded">uscln--</code>.</p>
+                    <pre><code class="language-cpp">
+int a, b, uscln;
+// ... (Nhập a, b)
+uscln = (a < b) ? a : b; // uscln = min(a, b)
+
+while (a % uscln != 0 || b % uscln != 0)
+{
+    uscln--; // Lùi dần uscln
+}
+cout << "USCLN cua " << a << " va " << b << " la " << uscln;
+                    </code></pre>
+
+                    <h5 class="font-semibold text-gray-700 mt-4 mb-2">Cách 2: Thuật toán Euclid (Trừ liên tiếp)</h5>
+                    <p class="mb-2"><strong>Công thức:</strong> $(a, b) = (a – b, b)$ nếu $a > b$; $(a, b) = (a, b – a)$ nếu $b > a$.</p>
+                    <pre><code class="language-cpp">
+// ... (Nhập a, b)
+while (a != b) // Dùng C++
+{
+    if (a > b)
+        a = a - b;
+    else
+        b = b - a;
+}
+cout << "USCLN cua a va b la " << a; // USCLN là a (hoặc b) khi a = b
+                    </code></pre>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-6">
+                    <h4 class="text-xl font-semibold text-gray-700 mb-3">Bài tập 8: Xuất $n$ số đầu tiên trong dãy Fibonacy</h4>
+                    <p class="mb-2"><strong>Định nghĩa:</strong> $a_0 = 1, a_1 = 1$, $a_n = a_{n-1} + a_{n-2}$.</p>
+                    <p class="mb-2"><strong>Thuật toán:</strong> Dùng vòng lặp để tính số tiếp theo (an) dựa trên hai số trước (an1, an2).</p>
+                    <pre><code class="language-cpp">
+int n, i;
+long an, an1, an2;
+// ... (Nhập n)
+
+an2 = 1; 
+an1 = 0; 
+// an2 là f(i-2), an1 là f(i-1)
+// Bắt đầu bằng 2 số ảo (1, 0) để vòng lặp chạy đúng ngay từ i=1
+
+cout << "Day " << n << " so Fibonacy dau tien: ";
+for (i = 1; i <= n; i++)
+{
+    an = an2 + an1; // Tính an = f(i)
+    cout << an << " ";
+    
+    // Cập nhật cho vòng lặp sau
+    an2 = an1; // f(i-2) mới = f(i-1) cũ
+    an1 = an;  // f(i-1) mới = f(i) cũ
+}
+// Kết quả (n=7): 1 1 2 3 5 8 13
+                    </code></pre>
+                </div>
+                
+                <!-- Tóm tắt -->
+                <div class="mt-10 pt-6 border-t border-gray-200">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-3">Kết luận</h3>
+                    <p class="mb-4 leading-relaxed">
+                        Các cấu trúc lặp (<code class="bg-gray-200 px-2 py-1 rounded">for</code>, <code class="bg-gray-200 px-2 py-1 rounded">while</code>, <code class="bg-gray-200 px-2 py-1 rounded">do...while</code>) là nền tảng cơ bản giúp tự động hóa việc thực hiện các hành động lặp đi lặp lại trong lập trình. Việc lựa chọn cấu trúc lặp phù hợp (ví dụ: <code class="bg-gray-200 px-2 py-1 rounded">for</code> khi biết trước số lần lặp, <code class="bg-gray-200 px-2 py-1 rounded">do...while</code> khi cần chạy ít nhất một lần) là rất quan trọng để tối ưu hóa thuật toán.
+                    </p>
+                    <p class="mb-4 leading-relaxed italic text-gray-600">
+                        Sự khác biệt cốt lõi có thể được hình dung như sau:
+                        Nếu cấu trúc lặp là một người gác cổng kiểm soát việc đi qua, thì:
+                        <ul class="list-disc list-outside pl-6 mt-2 space-y-2">
+                            <li><strong>While</strong> giống như việc người gác cổng kiểm tra giấy tờ <strong>trước khi</strong> bạn bước vào khu vực (nếu giấy tờ sai, bạn không bao giờ được vào).</li>
+                            <li><strong>Do...while</strong> giống như người gác cổng cho phép bạn bước vào trước, <strong>sau đó mới</strong> kiểm tra giấy tờ (bạn luôn thực hiện được ít nhất một hành động trước khi bị đuổi ra).</li>
+                            <li><strong>For</strong> giống như việc bạn đã nhận được một tờ lịch trình rõ ràng (khởi đầu, điều kiện, bước nhảy) trước khi bắt đầu hành trình.</li>
+                        </ul>
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-8 bg-gray-800 text-gray-400 mt-12">
+        <p>&copy; 2025 | Tài liệu học tập môn Nhập môn Lập trình.</p>
+    </footer>
+
+    <!-- Prism.js cho syntax highlighting -->
+    <!-- 1. Tải Core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" xintegrity="sha512-9khQRAUBYEJDCDVP2owVf/ciEwclIZUPutG8GCEOPV8KAeS41s9TfAudWMAWAzspHHLRaOevrU8fE7s9DCBOOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 2. Tải Autoloader để tự động nhận diện ngôn ngữ (C, C++, Pseudocode) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" xintegrity="sha512-SkmBfuA2hqjzEVpbaK+wTBpHeqM2mN/0A5EgTMZPKPLyN+3oR9jBEOKzT6K0LA/OBOuKJv9unNLJcfhE+K9rCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+</html>

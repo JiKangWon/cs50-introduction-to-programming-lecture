@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề thi: Lập trình C++ Tổng hợp</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tải MathJax để hiển thị công thức LaTeX -->
+    <!-- 1. Cấu hình MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- 2. Tải script MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS cho Prism.js (Syntax Highlighting - Theme Okaidia) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" xintegrity="sha512-mIs9kKbaw6JrqdefaultImIKwD6rdMMjgNsJqdPLUEVBOxtSRhQjhpLSRYMbBOEaMbM8dcGchjlowkVYdPaODeWYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* Màu nền xám rất nhạt */
+        }
+        .exam-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 3rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+        .question-block {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px dashed #d1d5db;
+            padding-bottom: 2rem;
+        }
+        .question-block:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+        h2 {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+        }
+        h3 {
+            font-size: 1.25rem;
+            color: #374151;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        p, li {
+            line-height: 1.7;
+            color: #4b5563;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-top: 1rem;
+        }
+        pre {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="exam-container">
+        <!-- Tiêu đề đề thi -->
+        <header class="text-center mb-10 pb-6 border-b-2 border-emerald-600">
+            <h1 class="text-4xl font-bold text-emerald-700 mb-3">ĐỀ THI CUỐI KỲ</h1>
+            <p class="text-xl font-semibold text-gray-700">Môn: Nhập môn Lập trình C++</p>
+            <p class="text-lg text-gray-500 mt-2">Thời gian làm bài: 90 phút</p>
+        </header>
+
+        <main>
+            <!-- Câu 1: Hàm, Lặp, Điều kiện -->
+            <section class="question-block">
+                <h2>Câu 1: (3.0 điểm)</h2>
+                <p>Viết chương trình C++ thực hiện các yêu cầu sau:</p>
+                <ul>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">bool LaSoNguyenTo(int n)</code> trả về <code class="bg-gray-200 px-1.5 py-0.5 rounded">true</code> nếu $n$ là số nguyên tố, ngược lại trả về <code class="bg-gray-200 px-1.5 py-0.5 rounded">false</code>.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">int TongSNTChiaHetCho7(int n)</code> trả về tổng các số nguyên tố trong đoạn $[1, n]$ mà cũng chia hết cho 7.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">main</code> nhập vào một số nguyên $n$ và gọi hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">TongSNTChiaHetCho7(n)</code> để xuất kết quả ra màn hình.</li>
+                </ul>
+                <p class="mt-4"><strong>Yêu cầu chi tiết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">LaSoNguyenTo(int n)</code>:</strong></p>
+                <ul>
+                    <li>Số nhỏ hơn 2 không phải là số nguyên tố.</li>
+                    <li>Số nguyên tố là số chỉ chia hết cho 1 và chính nó.</li>
+                </ul>
+                <p class="mt-4"><strong>Ví dụ:</strong> Nếu $n = 50$, các số nguyên tố $\le 50$ và chia hết cho 7 là: $7$. Vậy tổng là $7$.</p>
+            </section>
+
+            <!-- Câu 2: Mảng 1 Chiều -->
+            <section class="question-block">
+                <h2>Câu 2: (4.0 điểm)</h2>
+                <p>Viết chương trình C++ quản lý một mảng số nguyên gồm $n$ phần tử ($n \le 100$) với các yêu cầu sau:</p>
+                <pre><code class="language-cpp">
+#define MAX 100
+                </code></pre>
+                <ul>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">void NhapMang(int a[], int &n)</code>: cho phép người dùng nhập số lượng phần tử $n$ (yêu cầu $n > 0$ và $n \le MAX$) và nhập các giá trị cho mảng.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">void XuatMang(int a[], int n)</code>: xuất các phần tử của mảng ra màn hình.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">int TimSoLeLonNhat(int a[], int n)</code>: trả về giá trị số lẻ lớn nhất trong mảng. Nếu mảng không có số lẻ, trả về 0.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">void SapXepChanLe(int a[], int n)</code>: sắp xếp mảng sao cho các số chẵn đứng ở đầu mảng (theo thứ tự tăng dần), các số lẻ đứng ở cuối mảng (theo thứ tự giảm dần).</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">main</code> gọi các hàm trên để thực thi chương trình.</li>
+                </ul>
+                <p class="mt-4"><strong>Ví dụ Sắp xếp:</strong> Mảng ban đầu: <code class="bg-gray-200 px-1.5 py-0.5 rounded">[4, 5, 1, 6, 9, 2, 7]</code>. Mảng sau khi sắp xếp: <code class="bg-gray-200 px-1.5 py-0.5 rounded">[2, 4, 6, 9, 7, 5, 1]</code>.</p>
+            </section>
+
+            <!-- Câu 3: Mảng 2 Chiều -->
+            <section class="question-block">
+                <h2>Câu 3: (3.0 điểm)</h2>
+                <p>Viết chương trình C++ quản lý một ma trận số nguyên $a$ gồm $m$ dòng và $n$ cột ($m, n \le 50$) với các yêu cầu sau:</p>
+                <pre><code class="language-cpp">
+#define MAXD 50
+#define MAXC 50
+                </code></pre>
+                <ul>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">void NhapMaTran(int a[][MAXC], int &m, int &n)</code>: cho phép người dùng nhập số dòng $m$, số cột $n$ và nhập giá trị cho ma trận.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">void XuatMaTran(int a[][MAXC], int m, int n)</code>: xuất ma trận ra màn hình.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">long TinhTichDuongCheoPhu(int a[][MAXC], int m, int n)</code>: hàm chỉ tính và trả về tích các phần tử trên đường chéo phụ <strong>nếu ma trận là ma trận vuông</strong> ($m == n$). Nếu ma trận không vuông, trả về 0.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">void ThayTheBangSo0(int a[][MAXC], int m, int n)</code>: thay thế tất cả các phần tử là số âm (nhỏ hơn 0) trong ma trận bằng giá trị 0.</li>
+                    <li>Viết hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">main</code> gọi các hàm trên để thực thi chương trình.</li>
+                </ul>
+                 <p class="mt-4"><strong>Gợi ý:</strong> Phần tử nằm trên đường chéo phụ của ma trận vuông $n \times n$ là các phần tử $a[i][j]$ thỏa mãn $i + j = n - 1$.</p>
+            </section>
+        </main>
+    </div>
+
+    <!-- Prism.js cho syntax highlighting -->
+    <!-- 1. Tải Core JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" xintegrity="sha512-9khQRAUBYEJDCDVP2owVf/ciEwclIZUPutG8GCEOPV8KAeS41s9TfAudWMAWAzspHHLRaOevrU8fE7s9DCBOOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 2. Tải Autoloader để tự động nhận diện ngôn ngữ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" xintegrity="sha512-SkmBfuA2hqjzEVpbaK+wTBpHeqM2mN/0A5EgTMZPKPLyN+3oR9jBEOKzT6K0LA/OBOuKJv9unNLJcfhE+K9rCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>

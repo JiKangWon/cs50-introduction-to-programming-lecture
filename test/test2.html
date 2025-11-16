@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề thi: Bài tập Lập trình C++ (Nâng cao)</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tải MathJax để hiển thị công thức LaTeX -->
+    <!-- 1. Cấu hình MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                tags: 'ams'
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- 2. Tải script MathJax -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS cho Prism.js (Syntax Highlighting - Theme Okaidia) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" xintegrity="sha512-mIs9kKbaw6JrqdefaultImIKwD6rdMMjgNsJqdPLUEVBOxtSRhQjhpLSRYMbBOEaMbM8dcGchjlowkVYdPaODeWYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* Màu nền xám rất nhạt */
+        }
+        .exam-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 3rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+        .question-block {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px dashed #d1d5db;
+            padding-bottom: 2rem;
+        }
+        .question-block:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+        h2 {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        h3 { /* Dùng cho tên bài tập */
+            font-size: 1.15rem;
+            color: #374151;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        p, li {
+            line-height: 1.7;
+            color: #4b5563;
+        }
+        /* BỎ CSS ol cũ, sẽ dùng class Tailwind */
+        /* ol { ... } */
+        li {
+            margin-bottom: 1rem;
+        }
+        pre {
+            margin-top: 1rem;
+        }
+        .formula-box {
+            background-color: #f8fafc;
+            border: 1px solid #e5e7eb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            overflow-x: auto;
+        }
+        /* Đảm bảo li bên trong ol grid không bị thụt vào thêm */
+        .grid ol > li, .grid > li {
+            padding-left: 0;
+            margin-left: 0;
+        }
+        .grid > li::marker {
+            font-weight: 600;
+        }
+
+        .image-container {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .image-container img {
+            max-width: 300px;
+            height: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="exam-container">
+        <!-- Tiêu đề đề thi -->
+        <header class="text-center mb-10 pb-6 border-b-2 border-emerald-600">
+            <h1 class="text-4xl font-bold text-emerald-700 mb-3">ĐỀ THI BÀI TẬP TỔNG HỢP</h1>
+            <p class="text-xl font-semibold text-gray-700">Môn: Nhập môn Lập trình C++</p>
+        </header>
+
+        <main>
+            <!-- CÁC BÀI TOÁN TUẦN TỰ -->
+            <section class="question-block">
+                <h2>CÁC BÀI TOÁN TUẦN TỰ</h2>
+                <ol class="list-decimal pl-6">
+                    <li>Viết chương trình nhập 2 điểm $A(x_{1},y_{1})$ và $B(x_{2},y_{2})$ trên hệ trục tọa độ Descartes. Tính và in khoảng cách giữa 2 điểm đó theo công thức:
+                        <div class="formula-box">$\sqrt{(x_{2}-x_{1})^{2}+(y_{2}-y_{1})^{2}}$</div>
+                    </li>
+                    <li>Nhập tọa độ 3 đỉnh của một tam giác. Tính và in diện tích tam giác theo công thức Heron:
+                        <div class="formula-box">$s = (side1 + side2 + side3) / 2$</div>
+                        <div class="formula-box">$Area = \sqrt{s(s - side1)(s - side2)(s - side3)}$</div>
+                        Trong đó $side1, side2, side3$ là độ dài các cạnh.
+                    </li>
+                </ol>
+            </section>
+
+            <!-- CÁC BÀI TOÁN RẼ NHÁNH -->
+            <section class="question-block">
+                <h2>CÁC BÀI TOÁN RẼ NHÁNH</h2>
+                <ol class="list-decimal pl-6">
+                    <li>Nhập một số nguyên. Kiếm tra xem số là chẵn hay lẻ.</li>
+                    <li>Viết chương trình giải phương trình bậc nhất $ax + b = 0$.</li>
+                    <li>Viết chương trình giải phương trình bậc hai $ax^2 + bx + c = 0$.</li>
+                    <li>Nhập một hệ phương trình tuyến tính 2 ẩn. Giải hệ bằng qui tắc Cramer:
+                        <p>$ax + by = e$</p>
+                        <p>$cx + dy = f$</p>
+                        <p>Công thức:</p>
+                        <div class="formula-box">$x = \frac{ed - bf}{ad - bc}$</div>
+                        <div class="formula-box">$y = \frac{af - ec}{ad - bc}$</div>
+                        <p>Chương trình thông báo "Phương trình vô nghiệm" nếu $ad - bc = 0$.</p>
+                    </li>
+                    <li>Năm nhuận là năm thỏa một trong 2 điều kiện:
+                        <ul class="list-disc pl-6">
+                            <li>Chia hết cho 4 và không chia hết cho 100.</li>
+                            <li>Chia hết cho 400.</li>
+                        </ul>
+                        <p>Nhập một năm, xác định năm nhập là nhuận hay thường.</p>
+                    </li>
+                    <li>Nhập số nguyên, kiểm tra xem số có:
+                        <ol style="list-style-type: lower-alpha;" class="pl-6">
+                            <li>Chia hết cho 5 và 6</li>
+                            <li>Chia hết cho 5 hoặc 6</li>
+                            <li>Không chia hết cho số nào (5, 6)</li>
+                        </ol>
+                        <p>Ví dụ với các giá trị nhập 10, 30 và 23 chương trình cho kết quả:<br>
+                           10 chia hết cho 5 hoặc 6<br>
+                           30 chia hết cho cả 5 và 6<br>
+                           23 không chia hết cho 5 hoặc 6</p>
+                    </li>
+                    <li>(*) Nhập tọa độ một điểm trên hệ trục tọa độ Descartes. Kiểm tra xem điểm đó có nằm trong đường tròn tâm (0,0), bán kính 10.
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/3Z6kH8H.png" alt="Diagram of a circle on coordinate plane">
+                        </div>
+                    </li>
+                    <li>(*) Nhập tọa độ một điểm (x,y), kiểm tra xem điểm đó có nằm trong hình chữ nhật tâm (0,0), chiều dài 10 và chiều cao 5.
+                        <div class="image-container">
+                             <img src="https://i.imgur.com/9eF6O1o.png" alt="Diagram of a rectangle on coordinate plane">
+                        </div>
+                        <p>Hướng dẫn: Một điểm nằm trong hình chữ nhật nếu độ đo theo trục ngang đến điểm (0,0) nhỏ hơn hoặc bằng $10/2$ và độ đo theo trục dọc đến điểm (0,0) nhỏ hơn hoặc bằng $5/2$.</p>
+                    </li>
+                    <li>Nhập tọa độ một điểm p. Kiểm tra xem điểm đó nằm trong hay nằm ngoài hình tam giác vuông như hình vẽ.
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/g0PqE2h.png" alt="Diagram of a right triangle on coordinate plane">
+                        </div>
+                    </li>
+                    <li>(*) Nhập tọa độ một điểm $(x,y),$ kiểm tra xem điểm đó có nằm trong phần hình quạt (sector) như hình bên phải.
+                        <div class="image-container">
+                            <img src="https://i.imgur.com/lqM0mFw.png" alt="Diagram of a circular sector on coordinate plane">
+                        </div>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- CÁC BÀI TÍNH TỔNG -->
+            <section class="question-block">
+                <h2>CÁC BÀI TÍNH TỔNG</h2>
+                <p>Viết chương trình tính các tổng sau:</p>
+                <ol class="grid grid-cols-1 md:grid-cols-2 gap-4 list-decimal list-inside">
+                    <li class="formula-box">$S(n) = n! = 1 \times 2 \times 3 \times \dots \times n, n \ge 1$</li>
+                    <li class="formula-box">$S(n) = 1^{2} + 2^{2} + 3^{2} + \dots + n^{2}$</li>
+                    <li class="formula-box">$S(n) = x + \frac{x^{2}}{2!} + \frac{x^{3}}{3!} + \dots + \frac{x^{n}}{n!}$</li>
+                    <li class="formula-box">$S(n) = \frac{1}{2} + \frac{1}{4} + \dots + \frac{1}{2n}$</li>
+                    <li class="formula-box">$S(n) = 1 + \frac{1}{3} + \frac{1}{5} + \dots + \frac{1}{2n+1}$</li>
+                    <li class="formula-box">$S(n) = \frac{1}{1 \times 2} + \frac{1}{2 \times 3} + \dots + \frac{1}{n \times (n+1)}$</li>
+                    <li class="formula-box">$S(n) = \frac{1}{2} + \frac{2}{3} + \frac{3}{4} + \dots + \frac{n}{n+1}$</li>
+                    <li class="formula-box">$S(n) = \frac{1}{2} + \frac{3}{4} + \frac{5}{6} + \dots + \frac{2n+1}{2n+2}$</li>
+                    <li class="formula-box">$S(n) = 1 + \frac{1}{1+2} + \frac{1}{1+2+3} + \dots + \frac{1}{1+2+\dots+n}$</li>
+                    <li class="formula-box">$S(n) = x + x^{2} + x^{3} + \dots + x^{n}$</li>
+                    <li class="formula-box">$S(n) = x + x^{3} + x^{5} + \dots + x^{2n+1}$</li>
+                    <li class="formula-box">$S(n) = x^{2} + x^{4} + \dots + x^{2n}$</li>
+                </ol>
+            </section>
+
+            <!-- THUẬT TOÁN TRÊN CHỮ SỐ -->
+            <section class="question-block">
+                <h2>THUẬT TOÁN TRÊN CHỮ SỐ</h2>
+                <ol class="list-decimal pl-6">
+                    <li>Tính tổng các chữ số của một số nguyên dương. VD: $n=3412$ thì tổng là $3+4+1+2=10$.</li>
+                    <li>Đếm số chữ số của một số nguyên dương.</li>
+                    <li>Đếm số chữ số chẵn của một số nguyên dương.</li>
+                    <li>Đếm số chữ số lẻ của một số nguyên dương.</li>
+                    <li>Tính tổng các chữ số của một số nguyên dương. (Lặp lại câu 25?)</li>
+                    <li>Tính tổng các chữ số chẵn của một số nguyên dương.</li>
+                    <li>Tính tổng các chữ số lẻ một số nguyên dương.</li>
+                    <li>Nhập một số nguyên dương. In ra số viết ngược lại của số nhập. (Ví dụ: 39845 $\to$ 54893)</li>
+                </ol>
+            </section>
+            
+            <!-- KIỂM TRA MỘT (NHIỀU) SỐ THỎA MỘT SỐ ĐIỀU KIỆN -->
+            <section class="question-block">
+                <h2>KIỂM TRA MỘT (NHIỀU) SỐ THỎA MỘT SỐ ĐIỀU KIỆN</h2>
+                <ol class="list-decimal pl-6">
+                    <li>Kiểm tra một số có phải là số nguyên tố.</li>
+                    <li>Số hoàn chỉnh là số bằng tổng các ước số của nó (không kể chính nó). Kiểm tra xem một số $n$ có phải là số hoàn chỉnh. (VD: $6 = 1+2+3$)</li>
+                    <li>Kiểm tra một số có phải là số chính phương. (Số chính phương = bình phương của một số nguyên).</li>
+                </ol>
+            </section>
+
+            <!-- KHÁC -->
+            <section class="question-block">
+                <h2>KHÁC</h2>
+                <ol class="list-decimal pl-6">
+                    <li>Viết chương trình trò chơi đoán số: Cho máy sinh ra một số ($x$) ngẫu nhiên trong phạm vi từ 0 đến 99. Người chơi được quyền đoán số đó trong 7 lần. Chương trình thông báo kết quả so sánh số nhập (y) với số của máy (x).
+                        <p>Hướng dẫn: Sử dụng hàm <code class="bg-gray-200 px-1.5 py-0.5 rounded">rand()</code>. Biểu thức <code class="bg-gray-200 px-1.5 py-0.5 rounded">rand() % 100</code> cho giá trị ngẫu nhiên trong phạm vi từ 0 đến 99.</p>
+                    </li>
+                    <li>Nhập một số nguyên dương. In ra số nhị phân của số đó.</li>
+                    <li>Nhập hai số nguyên dương. In ra ước số chung lớn nhất của hai số đó.</li>
+                    <li>Nhập hai số nguyên dương. In ra bội số chung nhỏ nhất của hai số đó.
+                        <div class="formula-box">BSCNN(a, b) = (a * b) / USCLN(a, b)</div>
+                    </li>
+                    <li>Nhập ba số nguyên dương. In ra ước số chung lớn nhất của ba số đó.</li>
+                    <li>Viết chương trình nhập các số thực. Việc nhập sẽ được kết thúc khi nhập giá trị 0. Tính tổng các số vừa nhập.</li>
+                    <li>Dùng vòng lặp tạo dãy: 1, 9, 25, 49, 81, 121, 169, 225, 289, 361, 441, 529, 625.</li>
+                    <li>Tương tự bài tập 7. Nhưng chỉ viết ra màn hình các giá trị nhỏ hơn số $m$ cho trước.</li>
+                </ol>
+            </section>
+            
+            <!-- MẢNG -->
+            <section class="question-block">
+                <h2>MẢNG</h2>
+                <ol class="list-decimal pl-6">
+                    <li>Tổng mảng $n$ phần tử kiểu nguyên.</li>
+                    <li>Tổng các số chẵn trong mảng.</li>
+                    <li>Tổng các số lẻ trong mảng.</li>
+                    <li>Tổng các số nguyên tố trong mảng.</li>
+                    <li>Tính tổng các số chính phương. Giả sử các giá trị $\ge 1$.</li>
+                    <li>Kiểm tra gía trị $x$ có trong mảng không.</li>
+                    <li>In ra chỉ số của phần tử đầu tiên có giá trị bằng $x$.</li>
+                    <li>In ra chỉ số của phần tử cuối có giá trị bằng $x$.</li>
+                    <li>In ra chỉ số của phần tử đầu tiên có giá trị lẻ (mảng kiểu nguyên).</li>
+                    <li>In ra chỉ số của phần tử đầu tiên có giá trị chẵn (mảng kiểu nguyên).</li>
+                    <li>In ra chỉ số của phần tử cuối có giá trị chẵn (mảng kiểu nguyên).</li>
+                    <li>In ra chỉ số của phần tử thứ hai có giá trị lẻ (mảng kiểu nguyên).</li>
+                    <li>Đếm số lần $x$ xuất hiện trong mảng (số phần tử $a[i]$ có giá trị bằng $x$).</li>
+                    <li>Đếm số giá trị chẵn có trong mảng.</li>
+                    <li>Tìm giá trị lớn nhất trong mảng kiểu số nguyên.</li>
+                    <li>Sắp xếp mảng theo chiều tăng dần.</li>
+                    <li>Sắp xếp mảng theo chiều giảm dần.</li>
+                    <li>Sắp xếp mảng theo chiều tăng (giảm) dần các giá trị chẵn.</li>
+                    <li>Tìm giá trị chẵn lớn nhất. (HD: Sắp xếp mảng tăng dần, tìm phần tử chẵn cuối cùng).</li>
+                    <li>Tìm giá trị lẻ bé nhất.</li>
+                    <li>Tìm số nguyên tố lớn nhất.</li>
+                    <li>Tìm số chính phương nhỏ nhất.</li>
+                    <li>Kiểm tra mảng đối xứng.
+                        <p>Ví dụ: [21, 12, 3, 3, 12, 21] là đối xứng. [21, 12, 3, 5, 3, 12, 21] là đối xứng. [21, 12, 3, 3, 11, 21] là không đối xứng.</p>
+                        <p>HD (sửa lại 0-based index): Các cặp đối xứng là $(a[i], a[n-1-i])$, $i=0, 1, ..., n/2 - 1$.</p>
+                    </li>
+                    <li>Phát sinh 20 số nguyên ngẫu nhiên trong khoảng {0, 1, ..., 9}. Xác định loại phần tử và số phần tử của mỗi loại. (Ví dụ: Nhập 1, 3, 1, 2, 3, 3 $\to$ Xuất: 2 số 1, 1 số 2, 3 số 3).</li>
+                    <li>Tính giá trị trung bình của mảng (GTTB) mảng $a$ kiểu số thực. $GTTB = (a[0] + ... + a[n-1]) / n$.</li>
+                    <li>Tính giá trị lệch chuẩn của mảng (GTLC) mảng $a$ kiểu số thực.
+                        <div class="formula-box">$GTLC = \sqrt{ \frac{(a[0]-GTTB)^{2} + \dots + (a[n-1]-GTTB)^{2}}{n} }$</div>
+                    </li>
+                    <li>Nhập mảng $n$ số thực dương. Tìm số nguyên bé nhất $M$ sao cho $a[i] < M$, với mọi $i=0, 1, ... n-1$.</li>
+                    <li>Nhập mảng $n$ số thực dương. Tìm số nguyên lớn nhất $m$ sao cho $a[i] \ge m$, với mọi $i=0, 1, ... n-1$.</li>
+                </ol>
+            </section>
+            
+            <!-- CHUỖI -->
+            <section class="question-block">
+                <h2>CHUỖI</h2>
+                <p>Giả sử chuỗi nhập khác rỗng và khác chuỗi chỉ toàn khoảng trắng.</p>
+                <ol class="list-decimal pl-6">
+                    <li>Tìm vị trí của khoảng trắng đầu tiên trong chuỗi.</li>
+                    <li>Giả sử chuỗi nhập không có khoảng trắng 2 đầu. Viết ra từ đầu tiên của chuỗi.</li>
+                    <li>Viết ra từ cuối cùng của chuỗi. (Tìm khoảng trắng cuối).</li>
+                    <li>Hoán vị từ đầu và từ cuối. Giả sử chuỗi có ít nhất 2 từ. Chuỗi không có khoảng trắng thừa.</li>
+                    <li>Trích các từ trong chuỗi S (có ít nhất 1 từ) và ghép các từ này theo thứ tự ngược với S.</li>
+                    <li>Đếm số từ trong một chuỗi.</li>
+                    <li>Nhập chuỗi. Viết ra từ thứ hai của chuỗi.</li>
+                    <li>Nhập chuỗi. Viết ra các từ, mỗi từ trên một dòng.</li>
+                    <li>Nhập chuỗi. Đổi ký tự đầu mỗi từ thành ký tự IN.</li>
+                    <li>Nhập chuỗi. Đổi ký tự cuối mỗi từ thành ký tự IN.</li>
+                    <li>Nhập chuỗi. Đổi ký tự thứ hai mỗi từ thành ký tự IN, giả sử các từ có ít nhất 2 ký tự.</li>
+                    <li>Xóa khoảng trắng hai đầu và giữa mỗi từ cách nhau một khoảng trắng.</li>
+                    <li>(*) Nhập một chuỗi. Cho $a$ là mảng các chuỗi. Gán từ thứ nhất vào phần tử $a[0]$, gán từ thứ hai vào phần tử $a[1]$, ..., gán từ thứ $n$ vào phần tử $a[n-1]$.</li>
+                    <li>Nhập chuỗi S. Nhập chuỗi t. Kiểm tra t có trong s không. Cho biết vị trí đầu tiên của t.</li>
+                    <li>Nhập chuỗi S. Nhập chuỗi t. Đếm số lần t có trong s.</li>
+                    <li>Nhập chuỗi. Đếm số ký tự thường, IN, ký số.</li>
+                    <li>Nhập một chuỗi có dạng $S_1\#S_2\#S_3\#\dots\#S_n$. $S_i$ không có ký tự \#. Hãy viết các $S_i$ khác rỗng ra màn hình, mỗi chuỗi trên một dòng.</li>
+                    <li>Nhập chuỗi s. Đổi ký tự alphabet trong s thành ký tự đứng ngay sau nó trong bảng ký tự alphabet. (VD: ABC $\to$ BCD, EFZ $\to$ FGA)</li>
+                    <li>Viết chương trình nhập một chuỗi S, viết ra màn hình các dòng, mỗi dòng là 5 ký tự của S.</li>
+                </ol>
+            </section>
+            
+            <!-- ĐỊNH NGHĨA CHƯƠNG TRÌNH CON -->
+            <section class="question-block">
+                <h2>ĐỊNH NGHĨA CHƯƠNG TRÌNH CON (HÀM)</h2>
+                <ol class="list-decimal pl-6">
+                    <li>Định nghĩa hàm kiểm tra số nguyên tố.</li>
+                    <li>Sử dụng hàm kiểm tra số nguyên tố để định nghĩa hàm tính tổng các số nguyên tố trong một mảng.</li>
+                    <li>Sử dụng hàm kiểm tra số nguyên tố để định nghĩa hàm tìm số nguyên tố nhỏ nhất trong một mảng. (Nếu không có trả về 0).</li>
+                    <li>Định nghĩa hàm kiểm tra số chính phương.</li>
+                    <li>Sử dụng hàm kiểm tra số chính phương để định nghĩa hàm tính tổng các số chính phương trong một mảng.</li>
+                    <li>Sử dụng hàm kiểm tra số chính phương để định nghĩa hàm tìm số chính phương lớn nhất trong một mảng. (Nếu không có trả về 0).</li>
+                    <li>Định nghĩa hàm kiểm tra số hoàn hảo (Số hoàn hảo = tổng các ước nhỏ hơn nó. VD $6=1+2+3$).</li>
+                    <li>Định nghĩa hàm cho từ đầu của chuỗi. (Chuỗi không có khoảng trắng 2 đầu, 2 từ cách nhau 1 khoảng trắng).</li>
+                    <li>Định nghĩa hàm cho từ cuối của chuỗi. (Tương tự trên).</li>
+                    <li>Định nghĩa hàm trả về một mảng là các số chẵn có trong mảng.</li>
+                    <li>Định nghĩa hàm trả về một mảng là các số lẻ có trong mảng.</li>
+                    <li>Định nghĩa hàm trả về một mảng là các số nguyên tố (sử dụng hàm SNT) có trong mảng.</li>
+                </ol>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Prism.js cho syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" xintegrity="sha512-9khQRAUBYEJDCDVP2owVf/ciEwclIZUPutG8GCEOPV8KAeS41s9TfAudWMAWAzspHHLRaOevrU8fE7s9DCBOOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" xintegrity="sha512-SkmBfuA2hqjzEVpbaK+wTBpHeqM2mN/0A5EgTMZPKPLyN+3oR9jBEOKzT6K0LA/OBOuKJv9unNLJcfhE+K9rCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>
